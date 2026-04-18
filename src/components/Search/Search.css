@@ -1,0 +1,33 @@
+.SearchBar {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem;
+    width: 20.3rem;
+    border:1px solid oklab(0.68937 0.10976 0.112391 / 0.1);
+    border-radius: 0.5rem;
+    background-color: oklab(0.68937 0.10976 0.112391 / 0.1);
+    font-size: large;
+    margin-top:0.3rem;
+}
+
+.SearchBar input{
+    border: none;
+    outline: none;
+    background-color: transparent;
+    width: 100%;
+    font-size:medium;
+}
+
+.SearchBar:focus-within {
+    border:2px solid #e8873d;
+}
+
+@media (max-width: 600px) {
+    
+    .SearchBar {
+        width: fit-content;
+        margin: 0.5em;
+        cursor: pointer;
+    }
+}

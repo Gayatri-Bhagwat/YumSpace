@@ -1,0 +1,46 @@
+/* Parent row */
+.RecipeDetailsRow {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+}
+
+/* Each block */
+.RecipeDetailComponents {
+    flex: 1;
+    border-right: 2px solid #ddd;
+    padding: 1rem 0;
+    display: flex;
+    justify-content: center;   /* CENTER item within its block */
+}
+
+.RecipeDetailComponents:last-child {
+    border-right: none;
+}
+
+.InnerWrapper {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;      
+}
+
+.RecipeDetailIcon {
+    display: flex;
+    align-items: center;
+}
+
+.KeyValues {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.KeyHeader {
+    font-size: 0.85rem;
+    font-weight: 700;
+}
+
+.KeyValue {
+    font-size: 0.9rem;
+    color: #555;
+}

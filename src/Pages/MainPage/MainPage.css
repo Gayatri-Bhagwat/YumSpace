@@ -1,0 +1,29 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
+
+* {
+  font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+  scrollbar-width: none;
+}
+
+.Sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    flex-wrap: wrap;
+    margin: 0.6rem 0rem 0rem 1rem;
+}
+.TopCard {
+    display: flex;
+    flex-direction: row;
+}
+
+@media (max-width: 768px) {
+    
+    .TopCard {
+        flex-direction: column;
+    }
+
+    .TopCard .RecipeContent {
+        margin-left: 1rem;
+    }
+}

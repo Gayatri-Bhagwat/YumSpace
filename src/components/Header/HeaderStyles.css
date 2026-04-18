@@ -1,0 +1,30 @@
+
+body {
+    margin: 0;
+    padding: 0;
+}
+.Header {
+    font-weight: 500;
+    margin-left:0.6rem;
+}
+
+.HeaderCard {
+  display: flex;
+  justify-content: space-between; /* left + right */
+  align-items: center;
+  width: 97%;
+  padding:0.7rem;
+}
+
+@media (max-width: 600px) {
+    .Header span{
+        display: none;
+        
+    }
+    .Header .HatIcon {
+        margin: 0rem 1rem 0.5rem 0rem;
+    }
+    .TotalRecipesFound {
+        margin-left:1rem;
+    }
+}

@@ -1,0 +1,21 @@
+.TipClass {
+    display:flex;
+    flex-direction: column;
+    border:1px solid #eee9e9;
+  border-radius: 1.2rem;
+  width: 20.8rem;
+  margin:0rem 0rem 0.5rem 0.5rem;
+  padding:1rem;
+}
+
+.TipClass p {
+    color:#7D6B5A;
+}
+.TipHeader span {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: 500;
+    padding-left:0.2rem;
+    font-size: larger;
+}

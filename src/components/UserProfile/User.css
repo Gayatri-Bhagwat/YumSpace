@@ -1,0 +1,67 @@
+.Parent{
+    margin: 0;
+    padding: 0; 
+}
+.UserSection {
+  display: flex;
+  margin-top: 0.5rem;
+  margin-left:0.5rem;
+}
+
+.UserCard {
+  border:1px solid #eee9e9;
+  border-radius: 1.2rem;
+  display: flex;
+  flex-direction: row;
+  width: 20.8rem;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem;
+  margin: 0;                     
+  box-shadow: #eee9e9 0px 1px 3px, #eee9e9 0px 1px 2px; /* Add subtle shadow */ 
+}
+
+.HatContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 60px;
+  height: 60px;
+  padding: 0.5rem;               
+  border-radius: 50%;
+  background-color: oklab(0.68937 0.10976 0.112391 / 0.1);
+}
+
+.UserInfo {
+  max-width: 230px;
+}
+
+.UserInfo > span:first-child {
+    color:#2D1f14;
+    font-weight: 500;
+    font-size: larger;
+}
+
+.UserInfo h4 {
+  color : #7D6B5A;
+    line-height: 1.5;
+    font-weight: lighter;
+    text-wrap-mode: wrap;
+    text-align: justify;
+}
+.TotalRecipeButton{
+    width: 10rem;
+    border-radius: 5rem;
+    cursor: pointer;
+    width:fit-content;
+    padding: 0.5rem 1rem;
+    background-color: oklab(0.68937 0.10976 0.112391 / 0.1);
+}
+
+.TotalRecipeButton span {
+  display: flex;
+  height: 2rem;
+  flex-direction: row;
+  align-items: center;   
+  gap: 0.4rem;
+} 

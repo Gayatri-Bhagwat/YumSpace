@@ -1,0 +1,21 @@
+.TagBadge{
+    width: fit-content;
+    border: None;
+    border-radius: 3rem;
+    background-color: #4a7c59;
+    padding:0.5rem;
+    color:white;
+    font-size: 0.9rem;
+    cursor: pointer;
+}
+
+.IngredientBadge {
+    width: fit-content;
+    border: None;
+    border-radius: 1.2rem;
+    background-color: #4a7c59;
+    padding:0.6rem;
+    color:white;
+    margin:0.3rem 0.3rem;
+    font-size: 0.8rem;
+}

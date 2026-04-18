@@ -1,0 +1,28 @@
+import { PiChefHat } from "react-icons/pi";
+import "./User.css"
+export default function UserProfile() {
+    return (
+        <div className="Parent">
+
+        <div className="UserSection">
+            <div className="UserCard">
+                <div className="HatContainer">
+                    <PiChefHat fontSize={"3rem"} color="#e8773d" />
+                </div>
+
+                <div className="UserInfo">
+                    <span>Gayatri Bhagwat</span>
+                    <h4>Food enthusiast & home chef 
+                        sharing delicious recipes Lorem ipsum dolor sit 
+                        amet consectetur adipisicing elit.</h4>
+                    <div className="TotalRecipeButton">
+                        <span>
+                            <PiChefHat fontSize={"1.8rem"} color="#e8773d" /> 24 Recipes
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        </div>
+    );
+}

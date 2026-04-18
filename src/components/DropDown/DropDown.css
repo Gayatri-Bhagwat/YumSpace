@@ -1,0 +1,9 @@
+.FilterOptions {
+    padding: 0.5rem;
+    width: 19rem;
+    border:1px solid oklab(0.68937 0.10976 0.112391 / 0.1);
+    border-radius: 0.5rem;
+    background-color: oklab(0.68937 0.10976 0.112391 / 0.1);
+    font-size: large;
+    cursor: pointer;
+}

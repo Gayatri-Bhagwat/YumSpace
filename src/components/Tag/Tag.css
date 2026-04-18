@@ -1,0 +1,22 @@
+.TagCard {
+  border:1px solid #eee9e9;
+  width: 20.8rem;
+  border-radius: 1.2rem;
+  height: 14.8rem;
+  margin: 0rem 0rem 0.5rem 0.5rem;
+  padding:1rem;
+}
+
+.TagList{
+    display: flex;
+    flex-wrap: wrap;
+    gap:0.5rem;
+    margin-top: 0.7rem;
+}
+
+.TagHeader span {
+   font-weight: 500;
+   font-size: larger;
+   padding-left: 0.3rem;
+}
+

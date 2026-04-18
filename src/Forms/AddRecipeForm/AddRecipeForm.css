@@ -1,0 +1,45 @@
+
+.FormHeader {
+    display:flex;
+    justify-content: space-between;
+    border-bottom:1px solid black;
+    margin-bottom:20px;
+}
+
+.FormHeader > :nth-child(2) {
+    cursor:pointer;
+    font-weight: 500;
+    color:#2d1f14;
+}
+
+.TimeAndServingDetails > :nth-child(2)
+{
+    display: flex;
+    flex-direction: row;
+    gap:0.4rem;
+    margin-bottom: 1rem;
+}
+
+.TagsInput {
+    margin-bottom:1rem;
+}
+
+.StepInput{
+    margin:1rem 0rem 1rem 0rem;
+}
+
+form {
+    color:#2d1f14;
+}
+
+.SaveButton{
+    width: 100%;
+    padding:8px;
+    font-size:medium;
+    border:none;
+    border-radius:8px;
+    background-color: #ea580c;
+    color:white;
+    font-weight: 500;
+    cursor: pointer;
+}
