@@ -33,7 +33,6 @@ export default function Recipe() {
             {isVisible && <div className="overlay" onClick={() => setIsVisible(false)}>
                 <div className="modal" onClick={(e) => e.stopPropagation()}>
                     <AddRecipeForm 
-                        recipe={recipe} 
                         setRecipe={setRecipe} 
                         isFormVisible={setIsVisible}
                         formVisible = {isVisible}/>

@@ -2,8 +2,8 @@
 .FormHeader {
     display:flex;
     justify-content: space-between;
-    border-bottom:1px solid black;
-    margin-bottom:20px;
+    margin-bottom:15px;
+    font-size:large;
 }
 
 .FormHeader > :nth-child(2) {
@@ -43,3 +43,4 @@ form {
     font-weight: 500;
     cursor: pointer;
 }
+

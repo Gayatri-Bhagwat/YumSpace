@@ -20,7 +20,7 @@ export default function RecipeDetailPage() {
     console.log({state}, "states");
     return (
         <div className="RecipeInformationCard">
-            <div className="ImageAndTitleContainer">
+            <div className="ImageAndTitleContainer" key={state.title}>
                 <img src={state.image}></img>
                 <div className="TagListOverImage">
                     {state.tags.map((tag: {name: string}) => {
@@ -30,7 +30,7 @@ export default function RecipeDetailPage() {
                 <h1>{state.title}</h1>
             </div>
             <div className="OtherRecipeDetails">
-                <RecipeComponents header="Prep Time" value={state.prepTime} icon={BsClockFill} />
+                <RecipeComponents header="Prep Time" value={state.preptime} icon={BsClockFill} />
                 <RecipeComponents header="Servings" value={state.servings} icon={FaUserGroup} />
                 <RecipeComponents header="Likes" value={state.likes} icon={HiHeart} />
             </div>

@@ -3,7 +3,7 @@ export interface MyFormValues {
   description: string;
   tags: { name: string }[]; 
   ingredients: { name: string }[];
-  image:string | File
+  image:string | FileList
   servings:number;
   likes:number;
   preptime:number;

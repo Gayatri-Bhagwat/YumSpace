@@ -20,7 +20,7 @@
 }
 
 .SearchBar:focus-within {
-    border:2px solid #e8873d;
+    outline:2px solid #e8873d;
 }
 
 @media (max-width: 600px) {

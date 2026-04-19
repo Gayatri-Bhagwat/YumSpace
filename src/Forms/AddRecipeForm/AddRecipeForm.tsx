@@ -1,5 +1,4 @@
 import { PiNotePencilFill } from "react-icons/pi";
-import RecipeDetails from "../../components/RecipeDetails/RecipeDetails";
 import { RxCrossCircled } from "react-icons/rx";
 import "../AddRecipeForm/AddRecipeForm.css"
 import { useForm } from "react-hook-form";
@@ -8,48 +7,71 @@ import TagIngredientInputForm from "../../components/Input/TagIngredientInput";
 import type { MyFormValues } from "../../Enums/FormFields";
 import StepsToPrepareForm from "../../components/Input/StepsInput";
 
-export default function AddRecipeForm({ recipe, setRecipe, isFormVisible, formVisible }: {
-    recipe: MyFormValues[],
-    setRecipe: (recipe: MyFormValues[]) => void,
+export default function AddRecipeForm({setRecipe, isFormVisible, formVisible }: {
+    setRecipe: (React.Dispatch<React.SetStateAction<MyFormValues[]>>)
     isFormVisible: (value: boolean) => void,
-    formVisible :boolean
+    formVisible: boolean
 }) {
 
     const { control, register, handleSubmit, formState: { errors }, getValues } = useForm<MyFormValues>({
         mode: "all",
         defaultValues: {
+            title: "",
+            preptime: 0,
+            servings: 0,
+            description: "",
+            likes: 0,
             tags: [{ name: "" }],
             ingredients: [{ name: "" }],
-            title: "",
-            description: "",
-            servings: 0,
-            preptime: 0,
-            likes: 0,
             stepsToPrepare: [{ step: 1, title: "", text: "", timeToPrepare: 0 }],
         }
     });
 
     console.log("errors", errors)
-    const imageValue = getValues("image")
-    // console.log()
     const AddRecipeData = (data: MyFormValues) => {
-        console.log(data);
-        console.log(URL.createObjectURL(imageValue[0].name))
-        setRecipe([...recipe, data]);
+        const imageVal = getValues("image")
+        const updatedData = {
+            ...data,
+            image: URL.createObjectURL(imageVal[0] as File)
+        }
+        setRecipe(prev => [...prev, updatedData]);
         console.log(data, "Added recipe")
-                    isFormVisible(false)
-
+        isFormVisible(false)
     }
 
     return (
         <>
             {formVisible && <form className="AddFormCard" >
-                <div className="FormHeader">
-                    <RecipeDetails icon={PiNotePencilFill} size={"1.2rem"} content="Add Recipe" color="#e8773d" />
-                    <RxCrossCircled size="1.6rem" color="#e8773d" onClick={() => {
-                        isFormVisible(false)
-                    }} />
+                <div
+                    className="FormHeader"
+                    style={{
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "space-between",
+                    }}
+                >
+                    <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+                        <div
+                            style={{
+                                width: "32px",
+                                height: "32px",
+                                borderRadius: "8px",
+                                background: "#fdf0e8",
+                                display: "flex",
+                                alignItems: "center",
+                                justifyContent: "center",
+                            }}
+                        >
+                            <PiNotePencilFill size="1.1rem" color="#e8773d" />
+                        </div>
+                        <div>
+                            <p style={{ margin: 0, fontSize: "medium" }}>Add recipe</p>
+                            <p style={{ margin: 0, fontSize: "small", color: "#888" }}>Fill in the details below</p>
+                        </div>
+                    </div>
+                    <RxCrossCircled onClick={() => isFormVisible(false)} size="1.5rem" color="#e8773d" />
                 </div>
+                        <hr></hr>
                 <div className="BasicRecipeInfo">
                     <span style={{ fontWeight: 500, color: "#2d1f14" }}>BASIC INFO</span>
                     <FormInputBasicDetails>

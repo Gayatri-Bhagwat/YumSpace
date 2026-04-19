@@ -31,7 +31,7 @@ export default function RecipeCard({ item }: { item: MyFormValues }) {
             }}
         >
             <div className="RecipeInfo">
-                <img src={item.image} alt={item.title} className={`RecipeImage`} />
+                <img src={item.image.toString()} alt={item.title} className={`RecipeImage`} />
                 <span className="RecipeTitle">{item.title}</span>
                 <div className="RecipeDetails">
                     <RecipeDetails icon={CgLock} content={item.preptime} color="black"/>

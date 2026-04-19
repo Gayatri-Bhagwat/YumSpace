@@ -58,11 +58,11 @@
 
 .modal {
   overflow-y:auto;
-  scrollbar-width: thin;
+  /* scrollbar-width: thin; */
   background:#eee9e9;
-  padding: 2rem;
+  padding: 1.2rem;
   border-radius: 12px;
-  width: 500px;
+  width: 470px;
   height: 90%;
   max-width: 90%;
 }

@@ -1,5 +1,5 @@
 import type { UseFormRegister } from "react-hook-form";
-import "../Input/Input.css"
+import styles from "../Input/Input.module.css"
 import type React from "react";
 import type { ReactElement } from "react";
 import type { MyFormValues } from "../../Enums/FormFields"
@@ -15,9 +15,10 @@ export function FormInput({ register, inputTitle, InputHeader, inputType, InputE
 })
 {
     return (
-        <div className="InputElement">
+        <div className={styles.InputElement}>
             <span>{InputHeader}</span>
             <InputElement
+                className={`${inputType} == 'textarea' ? ${styles.textarea} : ${styles.input}`}
                 placeholder={`Add ${inputTitle.at(0)?.toUpperCase() + inputTitle.substring(1, inputTitle.length)}`}
                 style={{width:`${width}rem`}}
                 type={inputType}   
@@ -29,7 +30,7 @@ export function FormInput({ register, inputTitle, InputHeader, inputType, InputE
 
 export function FormInputBasicDetails({children}:{children:ReactElement}) {
     return (
-        <div className="BasicRecipeDetailForm">
+        <div className={styles.BasicRecipeDetailForm}>
             {children}
         </div>
     );
@@ -38,7 +39,7 @@ export function FormInputBasicDetails({children}:{children:ReactElement}) {
 export function FormInputTimeAndServings({children}:{children:ReactElement})
 {
     return (
-        <div className="TimeAndServingDetailForm">
+        <div className={styles.TimeAndServingDetailForm}>
             {children}
         </div>
     )

@@ -15,8 +15,7 @@ export default function Header() {
                     </div>
                 </div>
                 <div className="Search">
-
-                <Search />
+                    <Search />
                 </div>
                 <span className="TotalRecipesFound">24 Recipes Found</span>
             </div>
