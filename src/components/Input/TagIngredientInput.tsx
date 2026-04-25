@@ -45,7 +45,7 @@ export function TagIngredientInputElement({ register, fields, objectName, remove
 }) {
     const headerName = `${objectName.substring(0, objectName.length - 1)}`
     return (
-        <div className={styles.InputWithButton} style={{ display: "flex", flexDirection: "column" }}>
+        <div className={styles.InputWithButton} key={crypto.randomUUID()} style={{ display: "flex", flexDirection: "column" }}>
             {fields.map((field, index) => (
                 <>
                     <div key={field.id} style={{ boxSizing: "border-box", display: "flex", marginBottom: "0.5rem", flexDirection: "row", gap: "0.7rem", alignItems: "center" }}>

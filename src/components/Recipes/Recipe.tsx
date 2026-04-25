@@ -4,23 +4,22 @@ import RecipeCard from "../RecipeCard/RecipeCard";
 import RecipeDetails from "../RecipeDetails/RecipeDetails";
 import { PiNotepadFill } from "react-icons/pi";
 import { IoMdAdd } from "react-icons/io";
-import { useState } from "react";
 import AddRecipeForm from "../../Forms/AddRecipeForm/AddRecipeForm";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import type { RootState } from "../../stores/store"
+import { hideRecipeForm, showRecipeForm } from "../../features/showRecipeForm/showRecipeSlice";
 
 export default function Recipe() {
-    const [isVisible, setIsVisible] = useState(false);
 
     const recipes = useSelector((state:RootState) => state.addRecipe.recipe)
-    console.log(recipes, "Use=selector")
-    console.log(isVisible)
+    const visible = useSelector((state:RootState) => state.showRecipe.visible)
+    const dispatch = useDispatch()
     return (
         <div className="RecipeSection">
             <div className="RecipeHeader">
                 <RecipeDetails icon={LuCookingPot} size={"2rem"} color="e8773d" content={"24 Results Found for Searched Recipe"} />
                 <button onClick={() => {
-                    setIsVisible(!isVisible)
+                    dispatch(showRecipeForm({visible: !visible, selectedRecipe:null, mode:'add'}))
                 }}>
                     <RecipeDetails icon={PiNotepadFill} size={"1.2rem"} color="e8773d" content="Add Recipe" />
                 </button>
@@ -32,11 +31,9 @@ export default function Recipe() {
                     />
                 ))}
             </div>
-            {isVisible && <div className="overlay" onClick={() => setIsVisible(false)}>
+            {visible && <div className="overlay" onClick={()=>dispatch(hideRecipeForm())}>
                 <div className="modal" onClick={(e) => e.stopPropagation()}>
-                    <AddRecipeForm 
-                        isFormVisible={setIsVisible}
-                        formVisible = {isVisible}/>
+                    <AddRecipeForm  />
                 </div>
             </div>}
         </div>

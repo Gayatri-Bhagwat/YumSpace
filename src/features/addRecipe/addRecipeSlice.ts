@@ -1,4 +1,4 @@
-import { createSlice, current, type PayloadAction } from "@reduxjs/toolkit";
+import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 import { RecipeCardData } from "../../TestData/TestData";
 import type { MyFormValues } from "../../Enums/FormFields";
 
@@ -16,10 +16,14 @@ export const RecipeSlice = createSlice({
     reducers:{
         addRecipe:(state, action:PayloadAction<MyFormValues>) => {
             state.recipe.push(action.payload)
-            console.log(current(state), "Adding data")
+        },
+        editRecipe:(state, action:PayloadAction<MyFormValues>) => {
+            const recipeIndex = state.recipe.findIndex((r)=>r.title === action.payload.title)
+            console.log(recipeIndex)
+            state.recipe[recipeIndex] = action.payload;
         }
     }
 })
 
-export const {addRecipe} = RecipeSlice.actions
+export const {addRecipe, editRecipe} = RecipeSlice.actions
 export default RecipeSlice.reducer

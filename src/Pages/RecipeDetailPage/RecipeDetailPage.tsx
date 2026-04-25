@@ -17,10 +17,9 @@ interface Step {
 
 export default function RecipeDetailPage() {
     const { state } = useLocation();
-    console.log({state}, "states");
     return (
-        <div className="RecipeInformationCard">
-            <div className="ImageAndTitleContainer" key={state.title}>
+        <div className="RecipeInformationCard" key={state.title}>
+            <div className="ImageAndTitleContainer" >
                 <img src={state.image}></img>
                 <div className="TagListOverImage">
                     {state.tags.map((tag: {name: string}) => {
@@ -34,16 +33,16 @@ export default function RecipeDetailPage() {
                 <RecipeComponents header="Servings" value={state.servings} icon={FaUserGroup} />
                 <RecipeComponents header="Likes" value={state.likes} icon={HiHeart} />
             </div>
-            <div className='RecipeDescription'>
+            <div className='RecipeDescription' >
                 <span className='RecipeDescription'>{state.description}</span>
             </div>
             <div className="InstructionsAndIngredientSection">
                 <div className="IngredientSection">
-                    <div className="IngredientListHeader">
+                    <div className="IngredientListHeader" >
                         <PiChefHat size={"2rem"} color="#e8773d" />
                         <span>Ingredients</span>
                     </div>
-                    <div className="IngredientList">
+                    <div className="IngredientList" >
                         {state.ingredients.map((ingredient: {name:string}) => {
                             return <div>
                                 <FaSquareFull color="#393939" />
@@ -52,11 +51,11 @@ export default function RecipeDetailPage() {
                         })}
                     </div>
                 </div>
-                <div className="StepsToPrepare">
+                <div className="StepsToPrepare" >
                     <span className="InstructionsHeader">Instructions</span>
                     {state.stepsToPrepare.map((step: Step) => {
                         return (
-                            <Instruction step={step}/>
+                            <Instruction step={step} key={step.step}/>
                         )
                     })}
                 </div>

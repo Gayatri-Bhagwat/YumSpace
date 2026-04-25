@@ -6,13 +6,13 @@ import { FormInputBasicDetails, FormInputTimeAndServings } from "../../component
 import TagIngredientInputForm from "../../components/Input/TagIngredientInput";
 import type { FieldConfig, MyFormValues } from "../../Enums/FormFields";
 import StepsToPrepareForm from "../../components/Input/StepsInput";
-import { useDispatch } from "react-redux";
-import { addRecipe } from "../../features/addRecipe/addRecipeSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { addRecipe, editRecipe } from "../../features/addRecipe/addRecipeSlice";
+import { hideRecipeForm } from "../../features/showRecipeForm/showRecipeSlice";
+import type { RootState } from "../../stores/store";
+import { useEffect, useMemo } from "react";
 
-export default function AddRecipeForm({ isFormVisible, formVisible }: {
-    isFormVisible: (value: boolean) => void,
-    formVisible: boolean
-}) {
+export default function AddRecipeForm() {
 
     const basicDetailFields: FieldConfig[] = [
         {
@@ -53,37 +53,52 @@ export default function AddRecipeForm({ isFormVisible, formVisible }: {
             }
         }
     ]
-
-    const { control, register, handleSubmit, formState: { errors }, getValues } = useForm<MyFormValues>({
+    const dispatch = useDispatch()
+    const { visible, selectedRecipe, mode } = useSelector((state: RootState) => state.showRecipe)
+    const defaultRecipeData = useMemo(() => ({
+        title: "",
+        preptime: 0,
+        servings: 0,
+        description: "",
+        likes: 0,
+        tags: [{ name: "" }],
+        ingredients: [{ name: "" }],
+        stepsToPrepare: [{ step: 1, title: "", text: "", timeToPrepare: 0 }],
+    }), [])
+    const { control, register, handleSubmit, reset, formState: { errors }, getValues } = useForm<MyFormValues>({
         mode: "all",
-        defaultValues: {
-            title: "",
-            preptime: 0,
-            servings: 0,
-            description: "",
-            likes: 0,
-            tags: [{ name: "" }],
-            ingredients: [{ name: "" }],
-            stepsToPrepare: [{ step: 1, title: "", text: "", timeToPrepare: 0 }],
-        }
+        defaultValues: selectedRecipe ?? defaultRecipeData
     });
 
-    const dispatch = useDispatch()
-    console.log("errors", errors)
     const AddRecipeData = (data: MyFormValues) => {
         const imageVal = getValues("image")
         const updatedData = {
             ...data,
             image: URL.createObjectURL(imageVal[0] as File)
         }
-        dispatch(addRecipe(updatedData))
-        console.log(data, "Added recipe")
-        isFormVisible(false)
+        if (mode === 'add') {
+
+            dispatch(addRecipe(updatedData))
+            console.log(data, "Added recipe")
+        }
+        else {
+            console.log('updating recipe...')
+            dispatch(editRecipe(updatedData))
+        }
+        dispatch(hideRecipeForm())
     }
 
+    useEffect(() => {
+        if (mode === 'edit' && selectedRecipe) {
+            reset(selectedRecipe)
+        }
+        else {
+            reset(defaultRecipeData)
+        }
+    }, [selectedRecipe, mode, defaultRecipeData, reset])
     return (
         <>
-            {formVisible && <form className="AddFormCard" >
+            {visible && <form className="AddFormCard" >
                 <div
                     className="FormHeader"
                     style={{
@@ -107,36 +122,44 @@ export default function AddRecipeForm({ isFormVisible, formVisible }: {
                             <PiNotePencilFill size="1.1rem" color="#e8773d" />
                         </div>
                         <div>
-                            <p style={{ margin: 0, fontSize: "medium" }}>Add recipe</p>
+                            <p style={{ margin: 0, fontSize: "medium" }}>{mode !== 'add' ? "Edit" : "Add"} Recipe</p>
                             <p style={{ margin: 0, fontSize: "small", color: "#888" }}>Fill in the details below</p>
                         </div>
                     </div>
-                    <RxCrossCircled onClick={() => isFormVisible(false)} size="1.5rem" color="#e8773d" />
+                    <RxCrossCircled onClick={() => dispatch(hideRecipeForm())} size="1.5rem" color="#e8773d" />
                 </div>
                 <hr></hr>
                 <div className="BasicRecipeInfo">
                     <span style={{ fontWeight: 500, color: "#2d1f14" }}>BASIC INFO</span>
-                    <FormInputBasicDetails register={register} error={errors} formData={basicDetailFields}>
-                    </FormInputBasicDetails>
+                    <FormInputBasicDetails
+                        register={register}
+                        error={errors}
+                        formData={basicDetailFields}
+                    />
                 </div>
                 <div className="TimeAndServingDetails">
                     <span style={{ fontWeight: 500, color: "#2d1f14" }}>TIME & SERVINGS</span>
-                    <FormInputTimeAndServings register={register} formData={timeServingsDetails} error={errors}>
-                    </FormInputTimeAndServings>
+                    <FormInputTimeAndServings
+                        register={register}
+                        formData={timeServingsDetails}
+                        error={errors}
+                    />
                 </div>
                 <div className="TagsInput">
                     <TagIngredientInputForm header="TAGS"
                         register={register}
                         control={control}
                         name={"tags"}
-                        error={errors} />
+                        error={errors}
+                    />
                 </div>
                 <div className="IngredientInput">
                     <TagIngredientInputForm header="INGREDIENTS"
                         register={register}
                         control={control}
                         name={"ingredients"}
-                        error={errors} />
+                        error={errors}
+                    />
                 </div>
                 <div className="StepInput">
                     <span style={{ fontWeight: 500, color: "#2d1f14" }}>STEPS</span>

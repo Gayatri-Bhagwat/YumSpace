@@ -7,36 +7,40 @@ import Badge from "../Badge/Badge";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import type { MyFormValues } from "../../Enums/FormFields";
+import { MdModeEdit } from "react-icons/md";
+import { useDispatch } from "react-redux";
+import { showRecipeForm } from "../../features/showRecipeForm/showRecipeSlice";
 
 export interface RecipeTypes {
-  title: string;
-  description: string;
-  tags: { name: string }[]; 
-  ingredients: { name: string }[];
-  image:string;
-  servings:number;
-  likes:number;
-  preptime:number;
-  stepsToPrepare?:{step: number, title:string, text:string, timeToPrepare:number}[];
+    title: string;
+    description: string;
+    tags: { name: string }[];
+    ingredients: { name: string }[];
+    image: string;
+    servings: number;
+    likes: number;
+    preptime: number;
+    stepsToPrepare?: { step: number, title: string, text: string, timeToPrepare: number }[];
 }
 export default function RecipeCard({ item }: { item: MyFormValues }) {
     const [hover, setHover] = useState(false);
+    const dispatch = useDispatch();
     const navigate = useNavigate();
     return (
         <div className="RecipeCard"
             onMouseEnter={() => setHover(true)}
             onMouseLeave={() => setHover(false)}
             onClick={() => {
-                navigate(`/recipe/${item.title}`, {state:item})
+                navigate(`/recipe/${item.title}`, { state: item })
             }}
         >
             <div className="RecipeInfo">
                 <img src={item.image.toString()} alt={item.title} className={`RecipeImage`} />
                 <span className="RecipeTitle">{item.title}</span>
                 <div className="RecipeDetails">
-                    <RecipeDetails icon={CgLock} content={item.preptime} color="black"/>
-                    <RecipeDetails icon={FaUserGroup} content={item.servings} color="black"/>
-                    <RecipeDetails icon={HiHeart} content={item.likes} color="black"/>
+                    <RecipeDetails icon={CgLock} content={item.preptime} color="black" />
+                    <RecipeDetails icon={FaUserGroup} content={item.servings} color="black" />
+                    <RecipeDetails icon={HiHeart} content={item.likes} color="black" />
                 </div>
                 <div className="Ingredients">
                     {item.tags.map((tag, index) => (
@@ -45,18 +49,30 @@ export default function RecipeCard({ item }: { item: MyFormValues }) {
                 </div>
             </div>
             {hover && <div style={{
-                background: "rgba(0,0,0,0.3)",
                 color: "white",
-                paddingTop: "7rem",
                 borderRadius: "10px",
                 textAlign: "center",
                 position: "absolute",
                 top: 0,
                 left: 0,
                 right: 0,
-                bottom: 0
-            }} >
-                Click here to view recipe details
+                bottom: 0,
+                background: "linear-gradient(to bottom, rgba(0,0,0,0.6), rgba(0,0,0,0.5))", // ✅ gradient background
+            }}>
+                <MdModeEdit onClick={(e) => {
+                    e.stopPropagation()
+                    dispatch(showRecipeForm({visible: true, selectedRecipe: item,mode:"edit" }))
+                }} size="1.6rem" style={{
+                    position: "absolute",
+                    top: "20px",
+                    right: "30px",
+                }} />
+
+                <div style={{
+                    paddingTop: "7rem",
+                }}>
+                    Click here to view recipe details
+                </div>
             </div>}
         </div>
     )
