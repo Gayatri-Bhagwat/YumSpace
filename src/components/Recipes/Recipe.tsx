@@ -1,17 +1,19 @@
 import { LuCookingPot } from "react-icons/lu";
 import "./Recipe.css"
 import RecipeCard from "../RecipeCard/RecipeCard";
-import { RecipeCardData } from "../../TestData/TestData";
 import RecipeDetails from "../RecipeDetails/RecipeDetails";
 import { PiNotepadFill } from "react-icons/pi";
 import { IoMdAdd } from "react-icons/io";
 import { useState } from "react";
 import AddRecipeForm from "../../Forms/AddRecipeForm/AddRecipeForm";
-import type { MyFormValues } from "../../Enums/FormFields";
+import { useSelector } from "react-redux";
+import type { RootState } from "../../stores/store"
 
 export default function Recipe() {
     const [isVisible, setIsVisible] = useState(false);
-    const [recipe, setRecipe] = useState<MyFormValues[]>(RecipeCardData)
+
+    const recipes = useSelector((state:RootState) => state.addRecipe.recipe)
+    console.log(recipes, "Use=selector")
     console.log(isVisible)
     return (
         <div className="RecipeSection">
@@ -25,7 +27,7 @@ export default function Recipe() {
                 <IoMdAdd display="none" size="2.5rem" className="AddButton" />
             </div>
             <div className="RecipeGrid" >
-                {recipe.map((recipe) => (
+                {recipes.map((recipe) => (
                     <RecipeCard key={recipe.title} item={recipe}
                     />
                 ))}
@@ -33,7 +35,6 @@ export default function Recipe() {
             {isVisible && <div className="overlay" onClick={() => setIsVisible(false)}>
                 <div className="modal" onClick={(e) => e.stopPropagation()}>
                     <AddRecipeForm 
-                        setRecipe={setRecipe} 
                         isFormVisible={setIsVisible}
                         formVisible = {isVisible}/>
                 </div>

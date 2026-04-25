@@ -6,9 +6,10 @@ import { FormInputBasicDetails, FormInputTimeAndServings } from "../../component
 import TagIngredientInputForm from "../../components/Input/TagIngredientInput";
 import type { FieldConfig, MyFormValues } from "../../Enums/FormFields";
 import StepsToPrepareForm from "../../components/Input/StepsInput";
+import { useDispatch } from "react-redux";
+import { addRecipe } from "../../features/addRecipe/addRecipeSlice";
 
-export default function AddRecipeForm({ setRecipe, isFormVisible, formVisible }: {
-    setRecipe: (React.Dispatch<React.SetStateAction<MyFormValues[]>>)
+export default function AddRecipeForm({ isFormVisible, formVisible }: {
     isFormVisible: (value: boolean) => void,
     formVisible: boolean
 }) {
@@ -35,7 +36,7 @@ export default function AddRecipeForm({ setRecipe, isFormVisible, formVisible }:
         {
             inputType: "number", inputTitle: "servings", InputElement: "input", inputHeader: "Servings", rules: {
                 required: "This field is required.",
-                // @ts-ignore
+                // @ts-expect-error suppress warning
                 validate: { positive: (value: number) => value > 0 || 'Servings must be greater than 0.' }
             }
         },
@@ -47,7 +48,7 @@ export default function AddRecipeForm({ setRecipe, isFormVisible, formVisible }:
         {
             InputElement: "input", inputType: "number", inputTitle: "preptime", inputHeader: "Prep time", rules: {
                 required: "This field is required.",
-                // @ts-ignore
+                // @ts-expect-error suppress warning
                 validate: { positive: (value: number) => value > 0 || 'Servings must be greater than 0.' }
             }
         }
@@ -67,6 +68,7 @@ export default function AddRecipeForm({ setRecipe, isFormVisible, formVisible }:
         }
     });
 
+    const dispatch = useDispatch()
     console.log("errors", errors)
     const AddRecipeData = (data: MyFormValues) => {
         const imageVal = getValues("image")
@@ -74,7 +76,7 @@ export default function AddRecipeForm({ setRecipe, isFormVisible, formVisible }:
             ...data,
             image: URL.createObjectURL(imageVal[0] as File)
         }
-        setRecipe(prev => [...prev, updatedData]);
+        dispatch(addRecipe(updatedData))
         console.log(data, "Added recipe")
         isFormVisible(false)
     }

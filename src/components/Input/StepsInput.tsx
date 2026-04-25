@@ -33,8 +33,11 @@ export default function StepsToPrepareForm({ register, control, error }: {
                             <input className={styles.input} {...register(`stepsToPrepare.${index}.title`, {
                                 validate: {
                                     positive: (value) => value != "" || "This field cannot be blank",
-                                    duplicateValue: (value: any) =>
-                                        !fields.some((field) => field.title.toLowerCase()  === value.toLowerCase()) || "Same key already exists"
+                                    duplicateValue: (value: string) =>
+                                        !fields.some(
+                                            (f, i) => i !== index &&  // exclude current field
+                                                f.title.toLowerCase() === value.toLowerCase()
+                                        ) || 'Duplicate value not allowed',
                                 }
                             })} placeholder="Step title eg.Kneeding" />
                             <ErrorMessage error={error} index={index} value='title' />

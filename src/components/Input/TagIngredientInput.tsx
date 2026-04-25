@@ -1,7 +1,7 @@
 import { RxCrossCircled } from "react-icons/rx"
 import styles from "../Input/Input.module.css"
 import { BiPlusCircle } from "react-icons/bi"
-import { type UseFormRegister, useFieldArray, type FieldArrayWithId, type Control, type FieldErrors, type FieldError } from "react-hook-form"
+import { type UseFormRegister, useFieldArray, type FieldArrayWithId, type Control, type FieldErrors } from "react-hook-form"
 import type { MyFormValues } from "../../Enums/FormFields"
 import RecipeDetails from "../RecipeDetails/RecipeDetails"
 import { IoInformationCircle } from "react-icons/io5"
@@ -55,8 +55,11 @@ export function TagIngredientInputElement({ register, fields, objectName, remove
                             {...register(`${objectName}.${index}.name` as const, {
                                 validate: {
                                     valueNotNull: (value) => value !== "" || "This field cannot be null.",
-                                    duplicateValue: (value: any) =>
-                                        !fields.some((field) => field.name.toLowerCase() === value.toLowerCase()) || `Same ${headerName} already exists`,
+                                    duplicateValue: (value: string) =>
+                                        !fields.some(
+                                            (f, i) => i !== index &&  // exclude current field
+                                                f.name.toLowerCase() === value.toLowerCase()
+                                        ) || 'Duplicate value not allowed',
                                 }
                             })}
                             style={{ width: "100%" }}
