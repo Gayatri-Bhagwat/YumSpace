@@ -4,4 +4,9 @@
     align-items: center;
     flex-direction: row;
     gap: 0.3rem;
+    text-wrap: wrap;
+}
+
+.RecipeDetail > *:first-child {
+    flex-shrink: 0;
 }

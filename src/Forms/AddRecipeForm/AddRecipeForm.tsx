@@ -2,16 +2,56 @@ import { PiNotePencilFill } from "react-icons/pi";
 import { RxCrossCircled } from "react-icons/rx";
 import "../AddRecipeForm/AddRecipeForm.css"
 import { useForm } from "react-hook-form";
-import { FormInput, FormInputBasicDetails, FormInputTimeAndServings } from "../../components/Input/Input";
+import { FormInputBasicDetails, FormInputTimeAndServings } from "../../components/Input/Input";
 import TagIngredientInputForm from "../../components/Input/TagIngredientInput";
-import type { MyFormValues } from "../../Enums/FormFields";
+import type { FieldConfig, MyFormValues } from "../../Enums/FormFields";
 import StepsToPrepareForm from "../../components/Input/StepsInput";
 
-export default function AddRecipeForm({setRecipe, isFormVisible, formVisible }: {
+export default function AddRecipeForm({ setRecipe, isFormVisible, formVisible }: {
     setRecipe: (React.Dispatch<React.SetStateAction<MyFormValues[]>>)
     isFormVisible: (value: boolean) => void,
     formVisible: boolean
 }) {
+
+    const basicDetailFields: FieldConfig[] = [
+        {
+            inputTitle: "title", InputElement: "input", inputHeader: "Recipe Title", inputType: "text", rules: {
+                required: "This field cannot be blank."
+            }
+        },
+        {
+            inputTitle: "image", InputElement: "input", inputHeader: "Image URL", inputType: "file", rules: {
+                required: "This field cannot be blank."
+            }
+        },
+        {
+            inputTitle: "description", InputElement: "textarea", inputHeader: "Description", inputType: "text", rules: {
+                required: "This field cannot be blank."
+            }
+        },
+    ];
+
+    const timeServingsDetails: FieldConfig[] = [
+        {
+            inputType: "number", inputTitle: "servings", InputElement: "input", inputHeader: "Servings", rules: {
+                required: "This field is required.",
+                // @ts-ignore
+                validate: { positive: (value: number) => value > 0 || 'Servings must be greater than 0.' }
+            }
+        },
+        {
+            InputElement: "input", inputType: "number", inputTitle: "likes", inputHeader: "Likes", rules: {
+                required: "This field is required.",
+            }
+        },
+        {
+            InputElement: "input", inputType: "number", inputTitle: "preptime", inputHeader: "Prep time", rules: {
+                required: "This field is required.",
+                // @ts-ignore
+                validate: { positive: (value: number) => value > 0 || 'Servings must be greater than 0.' }
+            }
+        }
+    ]
 
     const { control, register, handleSubmit, formState: { errors }, getValues } = useForm<MyFormValues>({
         mode: "all",
@@ -71,43 +111,34 @@ export default function AddRecipeForm({setRecipe, isFormVisible, formVisible }: 
                     </div>
                     <RxCrossCircled onClick={() => isFormVisible(false)} size="1.5rem" color="#e8773d" />
                 </div>
-                        <hr></hr>
+                <hr></hr>
                 <div className="BasicRecipeInfo">
                     <span style={{ fontWeight: 500, color: "#2d1f14" }}>BASIC INFO</span>
-                    <FormInputBasicDetails>
-                        <>
-                            <FormInput register={register} InputElement="input" inputTitle="title" InputHeader="Recipe Title" />
-                            <FormInput register={register} InputElement="input" inputTitle="image" inputType="file" InputHeader="Image URL" />
-                            <FormInput register={register} InputElement="textarea" inputTitle="description" InputHeader="Description" />
-                        </>
+                    <FormInputBasicDetails register={register} error={errors} formData={basicDetailFields}>
                     </FormInputBasicDetails>
                 </div>
-
                 <div className="TimeAndServingDetails">
                     <span style={{ fontWeight: 500, color: "#2d1f14" }}>TIME & SERVINGS</span>
-                    <FormInputTimeAndServings>
-                        <>
-                            <FormInput register={register} width={8.75} InputElement="input" inputType="number" inputTitle="servings" InputHeader="Servings" />
-                            <FormInput register={register} width={8.75} InputElement="input" inputType="number" inputTitle="likes" InputHeader="Likes" />
-                            <FormInput register={register} width={8.75} InputElement="input" inputType="number" inputTitle="preptime" InputHeader="Prep time" />
-                        </>
+                    <FormInputTimeAndServings register={register} formData={timeServingsDetails} error={errors}>
                     </FormInputTimeAndServings>
                 </div>
                 <div className="TagsInput">
                     <TagIngredientInputForm header="TAGS"
                         register={register}
                         control={control}
-                        name={"tags"} />
+                        name={"tags"}
+                        error={errors} />
                 </div>
                 <div className="IngredientInput">
                     <TagIngredientInputForm header="INGREDIENTS"
                         register={register}
                         control={control}
-                        name={"ingredients"} />
+                        name={"ingredients"}
+                        error={errors} />
                 </div>
                 <div className="StepInput">
                     <span style={{ fontWeight: 500, color: "#2d1f14" }}>STEPS</span>
-                    <StepsToPrepareForm register={register} control={control} />
+                    <StepsToPrepareForm register={register} control={control} error={errors} />
                 </div>
                 <button className="SaveButton" type="button" onClick={
                     handleSubmit(AddRecipeData)

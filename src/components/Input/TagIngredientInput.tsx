@@ -1,14 +1,17 @@
 import { RxCrossCircled } from "react-icons/rx"
 import styles from "../Input/Input.module.css"
 import { BiPlusCircle } from "react-icons/bi"
-import { type UseFormRegister, useFieldArray, type FieldArrayWithId, type Control } from "react-hook-form"
+import { type UseFormRegister, useFieldArray, type FieldArrayWithId, type Control, type FieldErrors, type FieldError } from "react-hook-form"
 import type { MyFormValues } from "../../Enums/FormFields"
+import RecipeDetails from "../RecipeDetails/RecipeDetails"
+import { IoInformationCircle } from "react-icons/io5"
 
-export default function TagIngredientInputForm({ header, register, control, name }: {
+export default function TagIngredientInputForm({ header, register, control, name, error }: {
     header: string,
     register: UseFormRegister<MyFormValues>,
     control: Control<MyFormValues>,
-    name: "tags" | "ingredients"
+    name: "tags" | "ingredients",
+    error: FieldErrors<MyFormValues>
 }) {
     const { fields, append, remove } = useFieldArray({
         control,
@@ -25,40 +28,58 @@ export default function TagIngredientInputForm({ header, register, control, name
                 removeItem={remove}
                 objectName={name}
                 fields={fields}
+                key={name}
+                error={error}
             />
             <AddButton text={header.toLowerCase()} onClick={() => append({ name: '' })} />
         </div>
     )
 }
 
-export function TagIngredientInputElement({ register, fields, objectName, removeItem }: {
+export function TagIngredientInputElement({ register, fields, objectName, removeItem, error }: {
     register: UseFormRegister<MyFormValues>,
     objectName: "tags" | "ingredients",
     removeItem: (index: number) => void,
-    fields: FieldArrayWithId<MyFormValues, "tags" | "ingredients">[]
+    fields: FieldArrayWithId<MyFormValues, "tags" | "ingredients">[],
+    error: FieldErrors<MyFormValues>
 }) {
+    const headerName = `${objectName.substring(0, objectName.length - 1)}`
     return (
         <div className={styles.InputWithButton} style={{ display: "flex", flexDirection: "column" }}>
             {fields.map((field, index) => (
-                <div key={field.id} style={{ boxSizing: "border-box", display: "flex", marginBottom: "0.5rem", flexDirection: "row", gap: "0.7rem", alignItems: "center" }}>
-                    <input
-                       className={styles.input}
-                        placeholder={`Add ${objectName.substring(0, objectName.length - 1)}`}
-                        {...register(`${objectName}.${index}.name` as const, {
-                            validate: (value) => value !== "" || "This field cannot be null.",
-                        })}
-                        style={{ width: "100%" }}
-                    />
-                    <RxCrossCircled
-                        size="1.4rem"
-                        onClick={() => {
-                            if (fields.length > 1) {
-                                removeItem(index);
-                            }
-                        }}
-                        style={{ cursor: "pointer", flexShrink: 0 }}
-                    />
-                </div>
+                <>
+                    <div key={field.id} style={{ boxSizing: "border-box", display: "flex", marginBottom: "0.5rem", flexDirection: "row", gap: "0.7rem", alignItems: "center" }}>
+                        <input
+                            className={styles.input}
+                            placeholder={`Add ${headerName}`}
+                            {...register(`${objectName}.${index}.name` as const, {
+                                validate: {
+                                    valueNotNull: (value) => value !== "" || "This field cannot be null.",
+                                    duplicateValue: (value: any) =>
+                                        !fields.some((field) => field.name.toLowerCase() === value.toLowerCase()) || `Same ${headerName} already exists`,
+                                }
+                            })}
+                            style={{ width: "100%" }}
+                        />
+                        <RxCrossCircled
+                            size="1.4rem"
+                            onClick={() => {
+                                if (fields.length > 1) {
+                                    removeItem(index);
+                                }
+                            }}
+                            style={{ cursor: "pointer", flexShrink: 0 }}
+                        />
+                    </div>
+                    <div className={styles.formError}>
+                        {error[objectName]?.[index] && <RecipeDetails
+                            icon={IoInformationCircle}
+                            content={error[objectName]?.[index]?.['name']?.message as string}
+                            color="red"
+                            fontSize={0.8}
+                            size="1rem" />}
+                    </div>
+                </>
             ))}
         </div>
     )

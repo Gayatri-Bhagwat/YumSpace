@@ -1,46 +1,74 @@
-import type { UseFormRegister } from "react-hook-form";
+import type { FieldError, FieldErrors, UseFormRegister } from "react-hook-form";
 import styles from "../Input/Input.module.css"
-import type React from "react";
-import type { ReactElement } from "react";
-import type { MyFormValues } from "../../Enums/FormFields"
+import type { FieldConfig, MyFormValues } from "../../Enums/FormFields"
+import RecipeDetails from "../RecipeDetails/RecipeDetails";
+import { IoInformationCircle } from "react-icons/io5";
 
 
-export function FormInput({ register, inputTitle, InputHeader, inputType, InputElement, width }: {
+export interface Props {
     register: UseFormRegister<MyFormValues>;
-    inputTitle:keyof MyFormValues ;
-    inputType?: string,
-    InputHeader: string,
-    InputElement: React.ElementType
-    width?: number
-})
-{
+    error: FieldErrors<MyFormValues>;
+    formData: FieldConfig[];
+}
+export function FormInput({ register, width, error, field }: {
+    register: UseFormRegister<MyFormValues>;
+    width?: number,
+    field: FieldConfig,
+    error: FieldErrors<MyFormValues>
+}) {
+    const { inputHeader, InputElement, inputTitle, inputType, rules } = field;
+    const errorMessage = (error as Record<string, FieldError | undefined>)?.[inputTitle]?.message;
     return (
         <div className={styles.InputElement}>
-            <span>{InputHeader}</span>
-            <InputElement
-                className={`${inputType} == 'textarea' ? ${styles.textarea} : ${styles.input}`}
+            <span>{inputHeader}</span>
+            <InputElement className={`${inputType} == 'textarea' ? ${styles.textarea} : ${styles.input}`}
                 placeholder={`Add ${inputTitle.at(0)?.toUpperCase() + inputTitle.substring(1, inputTitle.length)}`}
-                style={{width:`${width}rem`}}
-                type={inputType}   
-                {...register(`${inputTitle}`, { required: "This field is required." })} 
+                style={{ width: `${width}rem` }}
+                type={inputType}
+                min={0}
+                {...register(inputTitle, rules)}
             />
+            {
+                errorMessage &&
+                <RecipeDetails
+                    icon={IoInformationCircle}
+                    content={errorMessage}
+                    size="1rem"
+                    fontSize={0.8}
+                    color="red"
+                />
+            }
         </div>
     )
 }
 
-export function FormInputBasicDetails({children}:{children:ReactElement}) {
+export function FormInputBasicDetails({ register, error, formData }: Props) {
     return (
         <div className={styles.BasicRecipeDetailForm}>
-            {children}
+            {formData.map((field) => (
+                <FormInput
+                    key={field.inputTitle}
+                    register={register}
+                    error={error}
+                    field={field}
+                />
+            ))}
         </div>
     );
 }
 
-export function FormInputTimeAndServings({children}:{children:ReactElement})
-{
+export function FormInputTimeAndServings({ register, error, formData }: Props) {
     return (
         <div className={styles.TimeAndServingDetailForm}>
-            {children}
+            {formData.map((field) => (
+                <FormInput
+                    key={field.inputTitle}
+                    register={register}
+                    error={error}
+                    field={field}
+                    width={8.75}
+                />
+            ))}
         </div>
     )
 }

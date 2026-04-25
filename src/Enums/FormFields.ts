@@ -1,3 +1,5 @@
+import type { Path, RegisterOptions } from "react-hook-form";
+
 export interface MyFormValues {
   title: string;
   description: string;
@@ -8,4 +10,12 @@ export interface MyFormValues {
   likes:number;
   preptime:number;
   stepsToPrepare:{step: number, title:string, text:string, timeToPrepare:number}[];
+}
+
+export interface FieldConfig {
+   inputTitle: Path<MyFormValues>,
+   InputElement: React.ElementType,
+   inputType?: string,
+   inputHeader: string,
+  rules?: RegisterOptions<MyFormValues, Path<MyFormValues>>
 }

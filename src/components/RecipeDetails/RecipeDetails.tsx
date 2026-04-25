@@ -1,12 +1,16 @@
-import type {IconType } from "react-icons";
+import type { IconType } from "react-icons";
 import "./RecipeDetails.css"
 
-export default function RecipeDetails({icon: Icon, content, color, size}:{icon: IconType, 
-    content:number | string, color:string, size?:string}) {
+export default function RecipeDetails({ icon: Icon, content, color, size, fontSize }: {
+    icon: IconType,
+    content: number | string, color: string, size?: string, fontSize?: number
+}) {
     return (
         <div className="RecipeDetail" key={content}>
-            <Icon color={color} size={size}/>
-            <span>{content}</span>
+            {content && <Icon color={color} size={size} />}
+            <span style={{ fontSize: `${fontSize}rem`, color: color === 'red' ? 'red' : '' }}>
+                {content}
+            </span>
         </div>
     );
 }
