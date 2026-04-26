@@ -13,7 +13,8 @@ import type { RootState } from "../../stores/store";
 import { useEffect, useMemo } from "react";
 
 export default function AddRecipeForm() {
-
+    
+    const { visible, selectedRecipe, mode } = useSelector((state: RootState) => state.showRecipe)
     const basicDetailFields: FieldConfig[] = [
         {
             inputTitle: "title", InputElement: "input", inputHeader: "Recipe Title", inputType: "text", rules: {
@@ -22,7 +23,7 @@ export default function AddRecipeForm() {
         },
         {
             inputTitle: "image", InputElement: "input", inputHeader: "Image URL", inputType: "file", rules: {
-                required: "This field cannot be blank."
+                required:mode === 'add' ? "This field cannot be blank." : false
             }
         },
         {
@@ -54,7 +55,6 @@ export default function AddRecipeForm() {
         }
     ]
     const dispatch = useDispatch()
-    const { visible, selectedRecipe, mode } = useSelector((state: RootState) => state.showRecipe)
     const defaultRecipeData = useMemo(() => ({
         title: "",
         preptime: 0,
@@ -65,7 +65,7 @@ export default function AddRecipeForm() {
         ingredients: [{ name: "" }],
         stepsToPrepare: [{ step: 1, title: "", text: "", timeToPrepare: 0 }],
     }), [])
-    const { control, register, handleSubmit, reset, formState: { errors }, getValues } = useForm<MyFormValues>({
+    const { control, register, handleSubmit, reset, unregister, formState: { errors }, getValues } = useForm<MyFormValues>({
         mode: "all",
         defaultValues: selectedRecipe ?? defaultRecipeData
     });
@@ -74,15 +74,13 @@ export default function AddRecipeForm() {
         const imageVal = getValues("image")
         const updatedData = {
             ...data,
-            image: URL.createObjectURL(imageVal[0] as File)
+            image: typeof imageVal === 'string' ? imageVal : URL.createObjectURL(imageVal[0] as File)
         }
         if (mode === 'add') {
-
             dispatch(addRecipe(updatedData))
             console.log(data, "Added recipe")
         }
         else {
-            console.log('updating recipe...')
             dispatch(editRecipe(updatedData))
         }
         dispatch(hideRecipeForm())
@@ -91,11 +89,12 @@ export default function AddRecipeForm() {
     useEffect(() => {
         if (mode === 'edit' && selectedRecipe) {
             reset(selectedRecipe)
+            // unregister('image')
         }
         else {
             reset(defaultRecipeData)
         }
-    }, [selectedRecipe, mode, defaultRecipeData, reset])
+    }, [selectedRecipe, mode, defaultRecipeData, reset, unregister])
     return (
         <>
             {visible && <form className="AddFormCard" >
