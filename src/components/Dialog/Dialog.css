@@ -1,26 +1,25 @@
 .ConfirmBox {
     background: white;
     border-radius: 12px;
+    border: 2px solid #ff9f5a;
     padding: 1.5rem;
-    width: 300px;
-    text-align: center;
+    width: 400px;
     display: flex;
     flex-direction: column;
-    align-items: center;
-    gap: 8px;
 }
 
 .ConfirmBox h3 {
     font-size: 16px;
     font-weight: 500;
     color: #1a1a1a;
+    margin: 10px 0 10px 0;
 }
 
 .ConfirmBox p {
-    font-size: 13px;
+    font-size: 15px;
     color: #666;
-    line-height: 1.5;
-    margin-bottom: 8px;
+    text-align: justify;
+    margin: 0 0 10px 0;
 }
 
 .ConfirmActions {
@@ -35,7 +34,7 @@
     border: 0.5px solid #ddd;
     border-radius: 8px;
     background: transparent;
-    font-size: 13px;
+    font-size: 15px;
     cursor: pointer;
 }
 
@@ -44,9 +43,9 @@
     padding: 9px;
     border: none;
     border-radius: 8px;
-    background: #e8773d;
+    background: linear-gradient(to right, #ef4444, #dc2626);
     color: white;
-    font-size: 13px;
+    font-size: 15px;
     font-weight: 500;
     cursor: pointer;
 }
@@ -57,5 +56,34 @@
 }
 
 .DeleteBtn:hover {
-    background: #C45E28; 
+    background: linear-gradient(to right, #dc2626, #c71818);
+}
+
+.ConfirmBoxHeader {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 1rem;
+    padding-bottom: 1rem;
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+    border-bottom: 2px solid rgb(228, 214, 214);
+    margin-bottom: 0.75rem;
+    margin-left: -1.5rem;
+    margin-right: -1.5rem;
+}
+
+.WarningIcon {
+    background: linear-gradient(to right, #ef4444, #dc2626);
+    color: white;
+    border-radius: 50%;
+    padding: 0.8rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.ConfirmBoxHeader span {
+    font-size: 1.5rem;
+    font-weight: 600;
 }

@@ -7,11 +7,11 @@ import Badge from "../../components/Badge/Badge";
 import { PiChefHat } from "react-icons/pi";
 import Instruction from "../../components/Instruction/Instruction";
 import { BsClockFill } from "react-icons/bs";
-import { MdDelete } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
 import { hideDialog, showDialog } from "../../features/showDialogBox/showDialogSlice";
 import Dialog from "../../components/Dialog/Dialog";
 import type { RootState } from "../../stores/store";
+import { RiDeleteBinLine } from "react-icons/ri";
 
 interface Step {
     step: string;
@@ -32,7 +32,7 @@ export default function RecipeDetailPage() {
                     dispatch(showDialog())
                     console.log("dialog shown")
                 }}>
-                    <MdDelete size="1.7rem" />
+                    <RiDeleteBinLine size="1.8rem" />
                 </button>
                 <div className="TagListOverImage">
                     {state.tags.map((tag: { name: string }) => {
@@ -42,7 +42,7 @@ export default function RecipeDetailPage() {
                 <h1>{state.title}</h1>
             </div>
             {visible && <div className="DialogContainer">
-                <Dialog message="Are you sure you want to delete recipe." />
+                <Dialog message="Are you sure you want to delete" recipeTitle = {state.title}/>
             </div>}
             <div className="OtherRecipeDetails">
                 <RecipeComponents header="Prep Time" value={state.preptime} icon={BsClockFill} />

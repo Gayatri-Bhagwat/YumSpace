@@ -1,14 +1,19 @@
 import { useDispatch } from "react-redux"
 import "../Dialog/Dialog.css"
-import { MdDelete } from "react-icons/md";
 import { hideDialog } from "../../features/showDialogBox/showDialogSlice";
+import { IoWarningOutline } from "react-icons/io5";
 
-export default function Dialog({ message }: { message: string }) {
+
+export default function Dialog({ message, recipeTitle }: { message: string, recipeTitle: string }) {
     const dispatch = useDispatch()
     return <div className="ConfirmBox">
-        <MdDelete style={{ fontSize: '2rem', color: '#e8773d', marginBottom: '8px' }} />
-        <h3>Delete {message}?</h3>
-        <p>This action cannot be undone. The recipe will be permanently removed.</p>
+        <div className="ConfirmBoxHeader">
+            <IoWarningOutline  className="WarningIcon" size="4rem"/>
+            <span>Delete Recipe</span>
+        </div>
+        <h3>{message} <span style={{color:"#ff6200"}}>"{recipeTitle}"</span>?</h3>
+        <p>This action cannot be undone. All recipe data, including ingredients and 
+            instructions will be permanently removed.</p>
         <div className="ConfirmActions">
             <button className="CancelBtn" onClick={() => (dispatch(hideDialog()))}>
                 Cancel
@@ -17,6 +22,6 @@ export default function Dialog({ message }: { message: string }) {
             }}>
                 Yes, delete
             </button>
-        </div>
+        </div> 
     </div>
 }
