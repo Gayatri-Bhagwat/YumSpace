@@ -4,7 +4,7 @@ import Search from "../Search/Search"
 
 export default function Header() {
     return (
-        <>
+        <div className="topHeader">
             <div className="HeaderCard">
                 <div className="Header">
                     <div style={{ fontSize: `24px`, alignItems: "center", display: "flex", gap: "0.5rem", margin: "0.5rem 0rem 0rem 0.5rem" }}>
@@ -20,6 +20,6 @@ export default function Header() {
                 <span className="TotalRecipesFound">24 Recipes Found</span>
             </div>
             <hr style={{ border: "0.1px solid #eee9e9" }}></hr>
-        </>
+        </div>
     )
 }

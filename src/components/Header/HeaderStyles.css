@@ -1,11 +1,19 @@
-
 body {
-    margin: 0;
-    padding: 0;
+  margin: 0;
+  padding: 0;
 }
 .Header {
-    font-weight: 500;
-    margin-left:0.6rem;
+  font-weight: 500;
+  margin-left: 0.6rem;
+}
+
+.topHeader {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  background: white;
 }
 
 .HeaderCard {
@@ -13,18 +21,17 @@ body {
   justify-content: space-between; /* left + right */
   align-items: center;
   width: 97%;
-  padding:0.7rem;
+  padding: 0.7rem;
 }
 
 @media (max-width: 600px) {
-    .Header span{
-        display: none;
-        
-    }
-    .Header .HatIcon {
-        margin: 0rem 1rem 0.5rem 0rem;
-    }
-    .TotalRecipesFound {
-        margin-left:1rem;
-    }
+  .Header span {
+    display: none;
+  }
+  .Header .HatIcon {
+    margin: 0rem 1rem 0.5rem 0rem;
+  }
+  .TotalRecipesFound {
+    margin-left: 1rem;
+  }
 }

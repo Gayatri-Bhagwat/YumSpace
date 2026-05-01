@@ -60,7 +60,7 @@ export default function StepsToPrepareForm({ register, control, error }: {
                     </>
                 ))}
             </div>
-            <AddButton onClick={() => append({ step: StepsToPrepareForm.length + 1, 'text': '', timeToPrepare: 0, title: "" })}
+            <AddButton onClick={() => append({ step: fields.length + 1, 'text': '', timeToPrepare: 0, title: "" })}
                 text="steps" />
         </>
     );

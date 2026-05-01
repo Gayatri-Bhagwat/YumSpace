@@ -15,6 +15,7 @@
 .TopCard {
     display: flex;
     flex-direction: row;
+    margin-top:5rem;
 }
 
 @media (max-width: 768px) {
