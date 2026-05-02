@@ -1,29 +1,33 @@
 .RecipeHeader {
-    font-size:larger;
+    font-size: larger;
     font-weight: 500;
     display: flex;
     padding-left: 0.5rem;
-    align-items: flex-start;
+    align-items: center; /* changed from flex-start */
     justify-content: space-between;
 }
 
+.ButtonContainer {
+    display: flex;
+    align-items: center;
+}
 
-.RecipeHeader span{
+.ButtonContainer span {
     margin-left: 10px;
 }
-.RecipeSection{
+
+.RecipeSection {
     margin-top: 1rem;
 }
 
 .RecipeCard {
-    border:1px solid #eee9e9;
+    border: 1px solid #eee9e9;
     border-radius: 1.2rem;
     width: 100%;
-    padding:1rem;
+    padding: 1rem;
     overflow: hidden;
     position: relative;
 }
-
 
 .RecipeGrid {
     display: flex;
@@ -32,59 +36,79 @@
     max-width: fit-content;
 }
 
-.RecipeHeader > button{
-    margin-right:12px;
-    border:none;
+.ButtonContainer > button {
+    margin-right: 12px;
+    border: none;
     font-weight: lighter;
-    background-color: #eee9e9;
-    padding:6px;
+    background-color: #ff6b35;
+    padding: 10px;
+    color: white;
     border-radius: 1.2rem;
     font-size: medium;
     cursor: pointer;
 }
 
 .overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.5); /* dark backdrop */
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 1000;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
 }
 
+.ShoppingModal{
+    overflow-y: auto;
+    padding: 1.2rem;
+    border-radius: 12px;
+    width: 60rem;
+    height: fit-content;
+    max-width: 90%;
+    background:linear-gradient(#fef6ed , #fff0e1 ,#ffe8d4);
+}
 .modal {
-  overflow-y:auto;
-  /* scrollbar-width: thin; */
-  background:#eee9e9;
-  padding: 1.2rem;
-  border-radius: 12px;
-  width: 470px;
-  height: 90%;
-  max-width: 90%;
+    overflow-y: auto;
+    padding: 1.2rem;
+    border-radius: 12px;
+    width: 470px;
+    height: 90%;
+    max-width: 90%;
+    background:linear-gradient(#fef6ed , #fff0e1 ,#ffe8d4);
 }
 
-@media (max-width : 700px)
-{
-    .AddButton{
-        display: block;
-        margin-right: 40px;
-        border:none;
-        background-color: #eee9e9;
-        border-radius: 50%;
-        flex-shrink: 0;
-        padding:3px;
-        cursor: pointer;
+/* Mobile icon buttons — hidden by default */
+.IconContainer {
+    display: none;
+    gap: 0.8rem;
+    align-items: center;
+}
+
+.AddButton {
+    border: none;
+    background-color: #eee9e9;
+    border-radius: 50%;
+    flex-shrink: 0;
+    padding: 10px;
+    height: 3rem;
+    width: 3rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+@media (max-width: 700px) {
+    .IconContainer {
+        display: flex; 
+        margin-right:20px;/* show icon buttons */
     }
 
-    .RecipeHeader > :nth-child(2)
-    {
-        visibility: hidden;
-    }
-    .RecipeHeader > div:nth-child(1) {
-        font-size: large;
+    /* hide text buttons but remove their space */
+    .ButtonContainer > button {
+        display: none;
     }
 }

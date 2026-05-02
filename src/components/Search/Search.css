@@ -23,7 +23,7 @@
     outline:2px solid #e8873d;
 }
 
-@media (max-width: 600px) {
+@media (max-width: 700px) {
     
     .SearchBar {
         width: fit-content;

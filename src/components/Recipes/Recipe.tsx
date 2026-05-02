@@ -2,28 +2,48 @@ import { LuCookingPot } from "react-icons/lu";
 import "./Recipe.css"
 import RecipeCard from "../RecipeCard/RecipeCard";
 import RecipeDetails from "../RecipeDetails/RecipeDetails";
-import { PiNotepadFill } from "react-icons/pi";
 import { IoMdAdd } from "react-icons/io";
 import AddRecipeForm from "../../Forms/AddRecipeForm/AddRecipeForm";
 import { useDispatch, useSelector } from "react-redux";
 import type { RootState } from "../../stores/store"
 import { hideRecipeForm, showRecipeForm } from "../../features/showRecipeForm/showRecipeSlice";
+import { FaPlus } from "react-icons/fa6";
+import { IoCartOutline } from "react-icons/io5";
+import { hideIngredientDialog, showIngredientDialog } from "../../features/showGenerateIngredients/showGenerateIngredientSlice";
+import GenerateIngredientList from "../GenerateIngredientList/GenerateIngredientList";
 
 export default function Recipe() {
 
-    const recipes = useSelector((state:RootState) => state.addRecipe.recipe)
-    const visible = useSelector((state:RootState) => state.showRecipe.visible)
+    const recipes = useSelector((state: RootState) => state.addRecipe.recipe)
+    const visible = useSelector((state: RootState) => state.showRecipe.visible)
+    const { ingredientVisible } = useSelector((state: RootState) => state.showGenerateIngredient)
     const dispatch = useDispatch()
     return (
         <div className="RecipeSection">
+            <div className="GenerateIngredients">
+            </div>
             <div className="RecipeHeader">
                 <RecipeDetails icon={LuCookingPot} size={"2rem"} color="e8773d" content={"24 Results Found for Searched Recipe"} />
-                <button onClick={() => {
-                    dispatch(showRecipeForm({visible: !visible, selectedRecipe:null, mode:'add'}))
-                }}>
-                    <RecipeDetails icon={PiNotepadFill} size={"1.2rem"} color="e8773d" content="Add Recipe" />
-                </button>
-                <IoMdAdd display="none" size="2.5rem" className="AddButton" />
+                <div className="ButtonContainer">
+                    <button className="GenerateShoppingListButton" onClick={() => {
+                        dispatch(showIngredientDialog())
+                    }}>
+                        <RecipeDetails icon={IoCartOutline} content="Generate Shopping List" size="1.4rem" color="white" />
+                    </button>
+                    <button onClick={() => {
+                        dispatch(showRecipeForm({ visible: !visible, selectedRecipe: null, mode: 'add' }))
+                    }}>
+                        <RecipeDetails icon={FaPlus} size={"1.2rem"} color="white" content="Add Recipe" />
+                    </button>
+                    <div className="IconContainer">
+                        <IoCartOutline onClick={() => {
+                            dispatch(showIngredientDialog())
+                        }} display="none" size="2.5rem" className="AddButton" />
+                        <IoMdAdd onClick={() => {
+                            dispatch(showRecipeForm({ visible: !visible, selectedRecipe: null, mode: 'add' }))
+                        }} display="none" size="2.5rem" className="AddButton" />
+                    </div>
+                </div>
             </div>
             <div className="RecipeGrid" >
                 {recipes.map((recipe) => (
@@ -31,9 +51,14 @@ export default function Recipe() {
                     />
                 ))}
             </div>
-            {visible && <div className="overlay" onClick={()=>dispatch(hideRecipeForm())}>
+            {visible && <div className="overlay" onClick={() => dispatch(hideRecipeForm())}>
                 <div className="modal" onClick={(e) => e.stopPropagation()}>
-                    <AddRecipeForm  />
+                    <AddRecipeForm />
+                </div>
+            </div>}
+            {ingredientVisible && <div className="overlay" onClick={() => dispatch(hideIngredientDialog())}>
+                <div className="ShoppingModal" onClick={(e) => e.stopPropagation()}>
+                    <GenerateIngredientList />
                 </div>
             </div>}
         </div>

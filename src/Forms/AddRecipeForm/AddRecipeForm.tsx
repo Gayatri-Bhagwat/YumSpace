@@ -121,7 +121,7 @@ export default function AddRecipeForm() {
                             <PiNotePencilFill size="1.1rem" color="#e8773d" />
                         </div>
                         <div>
-                            <p style={{ margin: 0, fontSize: "medium" }}>{mode !== 'add' ? "Edit" : "Add"} Recipe</p>
+                            <p style={{ margin: 0, fontSize: "medium", fontWeight: 600 }}>{mode !== 'add' ? "Edit" : "Add"} Recipe</p>
                             <p style={{ margin: 0, fontSize: "small", color: "#888" }}>Fill in the details below</p>
                         </div>
                     </div>
@@ -129,7 +129,7 @@ export default function AddRecipeForm() {
                 </div>
                 <hr></hr>
                 <div className="BasicRecipeInfo">
-                    <span style={{ fontWeight: 500, color: "#2d1f14" }}>BASIC INFO</span>
+                    <span style={{ fontWeight: 600, color: "#2d1f14" }}>BASIC INFO</span>
                     <FormInputBasicDetails
                         register={register}
                         error={errors}
@@ -137,7 +137,7 @@ export default function AddRecipeForm() {
                     />
                 </div>
                 <div className="TimeAndServingDetails">
-                    <span style={{ fontWeight: 500, color: "#2d1f14" }}>TIME & SERVINGS</span>
+                    <span style={{ fontWeight: 600, color: "#2d1f14" }}>TIME & SERVINGS</span>
                     <FormInputTimeAndServings
                         register={register}
                         formData={timeServingsDetails}
@@ -161,7 +161,7 @@ export default function AddRecipeForm() {
                     />
                 </div>
                 <div className="StepInput">
-                    <span style={{ fontWeight: 500, color: "#2d1f14" }}>STEPS</span>
+                    <span style={{ fontWeight: 600, color: "#2d1f14" }}>STEPS</span>
                     <StepsToPrepareForm register={register} control={control} error={errors} />
                 </div>
                 <div className="SaveButtonWrapper">

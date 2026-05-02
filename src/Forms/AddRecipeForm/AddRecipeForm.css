@@ -4,6 +4,7 @@
     justify-content: space-between;
     margin-bottom:15px;
     font-size:large;
+  
 }
 
 .FormHeader > :nth-child(2) {
@@ -33,6 +34,7 @@ form {
     color:#2d1f14;
     height:100%;
     overflow-y: auto;
+    
 }
 
 
