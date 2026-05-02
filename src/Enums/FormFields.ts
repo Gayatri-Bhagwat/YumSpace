@@ -1,6 +1,7 @@
 import type { Path, RegisterOptions } from "react-hook-form";
 
 export interface MyFormValues {
+  id:number;
   title: string;
   description: string;
   tags: { name: string }[]; 

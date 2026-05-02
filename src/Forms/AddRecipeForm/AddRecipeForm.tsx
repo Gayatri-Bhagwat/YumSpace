@@ -13,7 +13,7 @@ import type { RootState } from "../../stores/store";
 import { useEffect, useMemo } from "react";
 
 export default function AddRecipeForm() {
-    
+
     const { visible, selectedRecipe, mode } = useSelector((state: RootState) => state.showRecipe)
     const basicDetailFields: FieldConfig[] = [
         {
@@ -23,7 +23,7 @@ export default function AddRecipeForm() {
         },
         {
             inputTitle: "image", InputElement: "input", inputHeader: "Image URL", inputType: "file", rules: {
-                required:mode === 'add' ? "This field cannot be blank." : false
+                required: mode === 'add' ? "This field cannot be blank." : false
             }
         },
         {
@@ -164,9 +164,11 @@ export default function AddRecipeForm() {
                     <span style={{ fontWeight: 500, color: "#2d1f14" }}>STEPS</span>
                     <StepsToPrepareForm register={register} control={control} error={errors} />
                 </div>
-                <button className="SaveButton" type="button" onClick={
-                    handleSubmit(AddRecipeData)
-                }>Save Recipe</button>
+                <div className="SaveButtonWrapper">
+                    <button className="SaveButton" type="button" onClick={handleSubmit(AddRecipeData)}>
+                        Save Recipe
+                    </button>
+                </div>
             </form>
             }
         </>

@@ -1,5 +1,6 @@
 export const RecipeCardData = [
     {
+        "id":1,
         "title": "Delicious Pizza",
         "image": "https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=1920&q=95",
         "preptime": 55,
@@ -31,6 +32,7 @@ export const RecipeCardData = [
         ]
     },
     {
+        "id":2,
         "title": "Spaghetti Carbonara",
         "image": "https://images.unsplash.com/photo-1525755662778-989d0524087e?auto=format&fit=crop&w=1920&q=95",
         "preptime": 45,
@@ -62,6 +64,7 @@ export const RecipeCardData = [
         ]
     },
     {
+        "id":3,
         "title": "Chicken Curry",
         "image": "https://images.unsplash.com/photo-1490645935967-10de6ba17061?auto=format&fit=crop&w=1920&q=95",
         "preptime": 60,
@@ -99,6 +102,7 @@ export const RecipeCardData = [
         ]
     },
     {
+        "id":4,
         "title": "Vegetable Stir Fry",
         "image": "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=1920&q=95",
         "preptime": 25,
@@ -130,6 +134,7 @@ export const RecipeCardData = [
         ]
     },
     {
+        "id":5,
         "title": "Chocolate Cake",
         "image": "https://images.unsplash.com/photo-1578985545062-69928b1d9587?auto=format&fit=crop&w=1920&q=95",
         "preptime": 90,
@@ -174,6 +179,7 @@ export const RecipeCardData = [
         ]
     },
     {
+        "id":6,
         "title": "Grilled Salmon",
         "image": "https://images.unsplash.com/photo-1676300185165-3f543c1fcb72?&auto=format&fit=crop&w=1920&q=95",
         "preptime": 25,
@@ -204,6 +210,7 @@ export const RecipeCardData = [
         ]
     },
     {
+        "id":7,
         "title": "Apple Pie",
         "image": "https://plus.unsplash.com/premium_photo-1694336203192-c9e7f2891b95?auto=format&fit=crop&w=1920&q=95",
         "preptime": 75,
@@ -234,6 +241,7 @@ export const RecipeCardData = [
         ]
     },
     {
+        "id":8,
         "title": "Beef Tacos",
         "image": "https://plus.unsplash.com/premium_photo-1664391890333-b6708e34b021?auto=format&fit=crop&q=60&w=1920",
         "preptime": 20,
@@ -264,6 +272,7 @@ export const RecipeCardData = [
         ]
     },
     {
+        "id":9,
         "title": "Pad Thai",
         "image": "https://images.unsplash.com/photo-1637806930600-37fa8892069d?auto=format&fit=crop&w=1920&q=95",
         "preptime": 30,

@@ -18,7 +18,7 @@ export const RecipeSlice = createSlice({
             state.recipe.push(action.payload)
         },
         editRecipe:(state, action:PayloadAction<MyFormValues>) => {
-            const recipeIndex = state.recipe.findIndex((r)=>r.title === action.payload.title)
+            const recipeIndex = state.recipe.findIndex((r)=>r.id === action.payload.id)
             console.log(recipeIndex)
             state.recipe[recipeIndex] = action.payload;
         },
