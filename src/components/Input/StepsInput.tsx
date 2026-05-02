@@ -51,9 +51,7 @@ export default function StepsToPrepareForm({ register, control, error }: {
                                     min={0}
                                     {...register(`stepsToPrepare.${index}.timeToPrepare`, {
                                         valueAsNumber: true,
-                                        required: "This field cannot be blank.",
-                                        validate: (value) => value > 0 || "Time value should be greater than 0"
-                                    })} type="number" /> mins
+                                    })} type="number" /> mins (Optional)
                             </div>
                             <ErrorMessage error={error} index={index} value='timeToPrepare' />
                         </div>
