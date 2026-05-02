@@ -2,12 +2,14 @@ import { configureStore } from "@reduxjs/toolkit"
 import RecipeReducer from "../features/addRecipe/addRecipeSlice"
 import showRecipeAddFormReducer from "../features/showRecipeForm/showRecipeSlice"
 import dialogSliceReducer from "../features/showDialogBox/showDialogSlice"
+import showGenerateIngredientSliceReducer from "../features/showGenerateIngredients/showGenerateIngredientSlice"
 
 export const store = configureStore({
     reducer:{
         addRecipe: RecipeReducer,
         showRecipe: showRecipeAddFormReducer,
         showDialog:dialogSliceReducer,
+        showGenerateIngredient: showGenerateIngredientSliceReducer,
     }
 })
 
