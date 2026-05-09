@@ -1,0 +1,48 @@
+.ShoppingListDescription{
+    font-size:1.3rem;
+    text-align: center;
+    text-wrap: wrap;
+}
+
+.RecipeItemList{
+    display:flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap:0.5rem;
+    padding:1rem 0rem;
+    border-radius:0.5rem;
+    margin:0.7rem 0rem;
+}
+
+.GenerateListButton{
+    width:100%;
+    background-color:#ff6b35;
+    outline:none;
+    color:white;
+    border:none;
+    height:3rem;    
+    border-radius:0.5rem;
+    text-align: center;
+    padding:0.5rem;
+    font-size:18px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.groceryListHeader{
+    display:flex;
+    align-items:center;
+    justify-content: space-between;
+    gap:4rem;
+    margin-bottom: 1.2rem;
+}
+
+.startOverButton{
+    background-color: #ff6b35;
+    border:1px solid #fd7442;
+}
+
+.startOverButton:hover{
+    background-color:#fd7442;
+}

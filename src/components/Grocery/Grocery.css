@@ -1,0 +1,73 @@
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  height: 27rem;
+  width: 100%;
+  overflow-y: scroll;
+  scrollbar-width: thin;
+  gap: 0 2rem;
+  margin-bottom: 2rem;
+  padding-right:0.5rem;
+}
+
+.cat-label {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  color: #E8521A;
+  margin-bottom: 10px;
+}
+
+.ingredient-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  background: #FFFFFF;
+  border: 1.5px solid #F5B99A;
+  border-radius: 12px;
+  padding: 12px 14px;
+  cursor: pointer;
+  margin-bottom: 8px;
+}
+
+.ingredient-card:hover{
+  background-color:#fff5ee;
+}
+
+
+.checkbox {
+  width: 20px;
+  height: 20px;
+  min-width: 20px;
+  border-radius: 4px;
+  border: 1.5px solid #CCCCCC;
+  margin-top: 1px;
+  accent-color: #E8521A;
+}
+
+.ing-name {
+  font-size: 15px;
+  font-weight: 500;
+  color: #1A1A1A;
+}
+
+.ingredient-card.checked .ing-name {
+  text-decoration: line-through;
+  color: #888888;
+}
+
+.ing-recipes {
+  font-size: 12px;
+  color: #888888;
+  margin-top: 2px;
+  line-height: 1.5;
+}
+
+
+.ing-qty {
+  font-size: 15px;
+  font-weight: 600;
+  color: #E8521A;
+  white-space: nowrap;
+  margin-left: auto;
+}
