@@ -1,7 +1,7 @@
 import { useLocation } from "react-router-dom";
 import RecipeComponents from "../../components/RecipeComponent/RecipeComponent";
 import { FaSquareFull, FaUserGroup } from "react-icons/fa6";
-import { HiHeart } from "react-icons/hi2";
+import { HiFire, HiHeart } from "react-icons/hi2";
 import "./RecipeDetailPage.css"
 import Badge from "../../components/Badge/Badge";
 import { PiChefHat } from "react-icons/pi";
@@ -12,6 +12,10 @@ import { hideDialog, showDialog } from "../../features/showDialogBox/showDialogS
 import Dialog from "../../components/Dialog/Dialog";
 import type { RootState } from "../../stores/store";
 import { RiDeleteBinLine } from "react-icons/ri";
+import Nutrition from "../../components/NutritionalDetails/Nutrition";
+import { generateNutritionInfo } from "../../services/gemini";
+import { useState } from "react";
+import { IoMdNutrition } from "react-icons/io";
 
 interface Step {
     step: string;
@@ -19,15 +23,44 @@ interface Step {
     text: string;
     timeToPrepare: string;
 }
+export interface Nutrition {
+    fats: number;
+    carbs: number;
+    protein: number;
+    overall_calories: number;
+}
 
+const initialNutritionData: Nutrition = {
+    fats: 0,
+    carbs: 0,
+    protein: 0,
+    overall_calories: 0
+}
 export default function RecipeDetailPage() {
     const { state } = useLocation();
+    const [nutritionInfo, setNutritionInfo] = useState(initialNutritionData)
+    const [loadNutritionInfo, setLoadNutritionInfo] = useState(true);
     const { visible } = useSelector((state: RootState) => state.showDialog)
     const dispatch = useDispatch()
     return (
         <div className="RecipeInformationCard" key={state.title} onClick={() => visible && dispatch(hideDialog())}>
             <div className="ImageAndTitleContainer" >
                 <img src={state.image}></img>
+                <button className="Nutritioninfo" onClick={async () => {
+                    try {
+                        setLoadNutritionInfo(true);
+                        const data = await generateNutritionInfo(state);
+                        console.log(data, "data")
+                        setNutritionInfo(data);
+                    } catch (error) {
+                        console.error("AI Error:", error);
+                    }
+                    finally {
+                        setLoadNutritionInfo(false);
+                    }
+                }}>
+                    <IoMdNutrition size="1.8rem" />
+                </button>
                 <button className="DeleteRecipe" onClick={() => {
                     dispatch(showDialog())
                     console.log("dialog shown")
@@ -42,12 +75,13 @@ export default function RecipeDetailPage() {
                 <h1>{state.title}</h1>
             </div>
             {visible && <div className="DialogContainer">
-                <Dialog message="Are you sure you want to delete" recipeTitle = {state.title}/>
+                <Dialog message="Are you sure you want to delete" recipeTitle={state.title} />
             </div>}
             <div className="OtherRecipeDetails">
                 <RecipeComponents header="Prep Time" value={state.preptime} icon={BsClockFill} />
                 <RecipeComponents header="Servings" value={state.servings} icon={FaUserGroup} />
                 <RecipeComponents header="Likes" value={state.likes} icon={HiHeart} />
+                {!loadNutritionInfo && <RecipeComponents header="Calories in All" value={nutritionInfo.overall_calories} icon={HiFire} />}
             </div>
             <div className='RecipeDescription' >
                 <span className='RecipeDescription'>{state.description}</span>
@@ -75,6 +109,16 @@ export default function RecipeDetailPage() {
                         )
                     })}
                 </div>
+            </div>
+            <div className="NutritionContainer">
+                {
+                    !loadNutritionInfo && <Nutrition
+                        fats={nutritionInfo.fats}
+                        protein={nutritionInfo.protein}
+                        carbs={nutritionInfo.carbs}
+                        overall_calories={nutritionInfo.overall_calories}
+                    />
+                }
             </div>
         </div>
     )

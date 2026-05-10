@@ -1,0 +1,91 @@
+/* Card wrapper */
+.NutritionalCard {
+  background-color: #FFF5EE;
+  border-radius: 16px;
+  padding: 1rem 1.25rem;
+  display: flex;
+  flex-direction: column;
+  width: 66rem;
+  gap: 1rem;
+  overflow: hidden;
+}
+
+/* Header — Nutritional Info + AI Generated badge */
+.NutritionHeader {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+/* AI Generated button */
+.GenerateButton {
+  background-color: #E8521A;
+  border-radius: 20px;
+  padding: 4px 12px;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  color:white;
+}
+
+/* Details section */
+.NutritionDetails {
+  padding: 0;
+}
+
+.NutritionalValuesDetails {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+/* Per serving + KCal */
+.calories {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 110px;
+}
+
+.calories span:first-child {
+  font-size: 13px;
+  color: #888888;
+}
+
+.calories span:last-child {
+  font-size: 26px;
+  font-weight: 700;
+  color: #1A1A1A;
+}
+
+/* Protein, Carbs, Fats container */
+.NutritionValueContainer {
+  display: flex;
+  gap: 1rem;
+  flex: 1;
+}
+
+/* Each value card */
+.NutritionalValueCard {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: #FFFFFF;
+  border: 1.5px solid #F5B99A;
+  border-radius: 12px;
+  padding: 14px 28px;
+  flex: 1;
+  gap: 4px;
+}
+
+.NutritionalValueCard .value {
+  font-size: 22px;
+  font-weight: 700;
+  color: #1A1A1A;
+}
+
+.NutritionalValueCard .element {
+  font-size: 13px;
+  color: #888888;
+}

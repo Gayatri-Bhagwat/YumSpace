@@ -354,6 +354,24 @@
     cursor: pointer;
 }
 
+.Nutritioninfo {
+    right:90px;
+     position: absolute;
+    top: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 60px;
+    height: 60px;
+    border-radius: 8px;
+    outline:none;
+    border:none;
+    border-radius:50%;
+    background: #FCEBEB;
+    color: #ef4444;
+    cursor: pointer;
+}
+
 .DialogContainer{
    position: fixed;
     top: 0;
@@ -367,4 +385,12 @@
     justify-content: center;
     backdrop-filter: blur(2px);
     z-index: 9999;
+}
+
+.NutritionContainer 
+{
+    display: flex;
+    align-items: center;
+    margin:1rem;
+    justify-content: center;
 }

@@ -1,5 +1,7 @@
 import { GoogleGenerativeAI, SchemaType } from "@google/generative-ai";
 import type { GroceryList } from "../RecipeSelectionList/RecipeSelectionList";
+import type { MyFormValues } from "../Enums/FormFields";
+import type { Nutrition } from "../Pages/RecipeDetailPage/RecipeDetailPage";
 
 const genAI = new GoogleGenerativeAI(import.meta.env.VITE_GEMINI_API_KEY);
 const model = genAI.getGenerativeModel({ model: "gemini-3.1-flash-lite-preview" })
@@ -89,4 +91,51 @@ export const generateGroceryList = async (recipeTitles: string[]): Promise<Groce
   const groceryList: GroceryList = JSON.parse(result.response.text())
   console.log(groceryList)
   return groceryList
+}
+
+
+export const generateNutritionInfo = async (recipe: MyFormValues): Promise<Nutrition> => {
+  const prompt = `
+  You are a professional nutritionist and dietitian.
+  
+  Calculate the nutritional information for the following recipe: "${recipe.title}"
+  with ${recipe.servings} servings.
+
+  Rules:
+  - Calculate values PER SERVING
+  - "calories" should be total KCal per serving (number only, no units)
+  - "protein" should be in grams per serving (number only, no units)
+  - "carbs" should be in grams per serving (number only, no units)
+  - "fats" should be in grams per serving (number only, no units)
+  - Base calculations on standard ingredient portions typically used in this recipe
+  - Values should be realistic and accurate for this type of dish
+  
+  Example for Pasta Carbonara (1 serving):
+  {
+    "calories": 480,
+    "protein": 22,
+    "carbs": 52,
+    "fats": 18
+  }
+`
+
+  const result = await model.generateContent({
+    contents: [{ role: "user", parts: [{ text: prompt }] }],
+    generationConfig: {
+      responseMimeType: "application/json",
+      responseSchema: {
+        type: SchemaType.OBJECT,
+        properties: {
+          fats: { type: SchemaType.NUMBER },  // 👈 object with type
+          carbs: { type: SchemaType.NUMBER },
+          protein: { type: SchemaType.NUMBER },  // 👈 fixed typo "protien"
+          overall_calories: { type: SchemaType.NUMBER }
+        }
+      }
+    }
+  })
+
+  const NutritionalInformation: Nutrition = JSON.parse(result.response.text())
+  console.log(NutritionalInformation, "information")
+  return NutritionalInformation;
 }

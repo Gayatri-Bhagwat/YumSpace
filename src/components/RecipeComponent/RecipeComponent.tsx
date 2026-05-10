@@ -16,6 +16,7 @@ export default function RecipeComponents({ icon: Icon, header, value }: {
                     <span className="KeyHeader">{header}</span>
                     <span className="KeyValue">{value}</span>
                 </div>
+
             </div>
         </div>
     )

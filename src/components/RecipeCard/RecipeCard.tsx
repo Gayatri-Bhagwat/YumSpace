@@ -10,6 +10,7 @@ import type { MyFormValues } from "../../Enums/FormFields";
 import { MdModeEdit } from "react-icons/md";
 import { useDispatch } from "react-redux";
 import { showRecipeForm } from "../../features/showRecipeForm/showRecipeSlice";
+import { generateNutritionInfo } from "../../services/gemini";
 
 export interface RecipeTypes {
     title: string;
@@ -22,8 +23,11 @@ export interface RecipeTypes {
     preptime: number;
     stepsToPrepare?: { step: number, title: string, text: string, timeToPrepare: number }[];
 }
+
+
 export default function RecipeCard({ item }: { item: MyFormValues }) {
     const [hover, setHover] = useState(false);
+    
     const dispatch = useDispatch();
     const navigate = useNavigate();
     return (
@@ -38,8 +42,8 @@ export default function RecipeCard({ item }: { item: MyFormValues }) {
                 <img src={item.image.toString()} alt={item.title} className={`RecipeImage`} />
                 <span className="RecipeTitle">{item.title}</span>
                 <div className="RecipeDetails">
-                    <RecipeDetails icon={CgLock} content={ `${item.preptime} mins` } color="black" />
-                    <RecipeDetails icon={FaUserGroup} content={ `${item.servings} servings` } color="black" />
+                    <RecipeDetails icon={CgLock} content={`${item.preptime} mins`} color="black" />
+                    <RecipeDetails icon={FaUserGroup} content={`${item.servings} servings`} color="black" />
                     <RecipeDetails icon={HiHeart} content={item.likes} color="black" />
                 </div>
                 <div className="Ingredients">
@@ -61,7 +65,7 @@ export default function RecipeCard({ item }: { item: MyFormValues }) {
             }}>
                 <MdModeEdit onClick={(e) => {
                     e.stopPropagation()
-                    dispatch(showRecipeForm({visible: true, selectedRecipe: item,mode:"edit" }))
+                    dispatch(showRecipeForm({ visible: true, selectedRecipe: item, mode: "edit" }))
                 }} size="1.6rem" style={{
                     position: "absolute",
                     top: "20px",
