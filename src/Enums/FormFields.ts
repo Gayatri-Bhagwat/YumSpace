@@ -1,22 +1,42 @@
 import type { Path, RegisterOptions } from "react-hook-form";
 
 export interface MyFormValues {
-  id:number;
+  id: number;
   title: string;
   description: string;
-  tags: { name: string }[]; 
+  tags: { name: string }[];
   ingredients: { name: string }[];
-  image:string | FileList
-  servings:number;
-  likes:number;
-  preptime:number;
-  stepsToPrepare:{step: number, title:string, text:string, timeToPrepare:number}[];
+  image: string | FileList
+  servings: number;
+  likes: number;
+  preptime: number;
+  stepsToPrepare: { step: number, title: string, text: string, timeToPrepare: number }[];
 }
 
 export interface FieldConfig {
-   inputTitle: Path<MyFormValues>,
-   InputElement: React.ElementType,
-   inputType?: string,
-   inputHeader: string,
+  inputTitle: Path<MyFormValues>,
+  InputElement: React.ElementType,
+  inputType?: string,
+  inputHeader: string,
   rules?: RegisterOptions<MyFormValues, Path<MyFormValues>>
+}
+
+export type Ingredient = {
+  name: string
+  recipe: string[]
+  quantity: number
+}
+
+export type SelectedGroceryListEnum = {
+  "Dairy and Eggs": string[]
+  "Meat": string[]
+  "Pantry": string[]
+  "Vegetables": string[]
+}
+
+export type GroceryListEnum = {
+  "Dairy and Eggs": Ingredient[]
+  "Meat": Ingredient[]
+  "Pantry": Ingredient[]
+  "Vegetables": Ingredient[]
 }

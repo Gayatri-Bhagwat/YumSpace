@@ -4,7 +4,7 @@ import type { MyFormValues } from "../Enums/FormFields";
 import type { Nutrition } from "../Pages/RecipeDetailPage/RecipeDetailPage";
 
 const genAI = new GoogleGenerativeAI(import.meta.env.VITE_GEMINI_API_KEY);
-const model = genAI.getGenerativeModel({ model: "gemini-3.1-flash-lite-preview" })
+const model = genAI.getGenerativeModel({ model: "gemini-3.1-flash-lite" })
 
 export const generateContent = async (prompt: string): Promise<string> => {
   const result = await model.generateContent(prompt) // 👈 no generationConfig, plain text

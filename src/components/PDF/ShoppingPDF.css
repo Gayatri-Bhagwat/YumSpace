@@ -1,0 +1,18 @@
+.GrocerypdfHeader {
+    background-color: #ff6b35;
+    height: 30px;
+    width: fit-content;
+    padding:1.4rem;
+}
+
+.GroceryGridPDF {
+    display: grid;
+  grid-template-columns: 1fr 1fr;
+  height: 27rem;
+  width: 100%;
+  overflow-y: scroll;
+  scrollbar-width: thin;
+  gap: 0 2rem;
+  margin-bottom: 2rem;
+  padding-right:0.5rem;
+}

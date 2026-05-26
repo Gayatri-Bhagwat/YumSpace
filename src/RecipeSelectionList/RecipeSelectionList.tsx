@@ -5,8 +5,8 @@ import RecipeDetails from "../components/RecipeDetails/RecipeDetails";
 import { RiAiGenerate } from "react-icons/ri";
 import "./RecipeSelectionList.css";
 import { generateGroceryList } from "../services/gemini";
-import GroceryList from "../components/Grocery/Grocery";
 import { IoPrintSharp } from "react-icons/io5";
+import GroceryList from "../components/Grocery/Grocery";
 import { ShoppingListPDF } from "../components/PDF/ShoppingListPdf";
 import { PDFDownloadLink } from "@react-pdf/renderer";
 

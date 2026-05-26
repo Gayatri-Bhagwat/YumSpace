@@ -1,8 +1,10 @@
 import { useState } from "react"
-import type { Ingredient } from "../../RecipeSelectionList/RecipeSelectionList"
+import type { Ingredient } from "../../Enums/FormFields"
 import "../Grocery/Grocery.css"
+import { useDispatch } from "react-redux"
+import { addIngredient } from "../../features/addIngredientsToList/addIngredientsToList"
 
-type Category = "Dairy and Eggs" | "Meat" | "Pantry" | "Vegetables"
+export type Category = "Dairy and Eggs" | "Meat" | "Pantry" | "Vegetables"
 
 
 
@@ -11,13 +13,15 @@ export default function GroceryList({ groceryList }: {
   groceryList: GroceryList
 }) {
   const [checked, setChecked] = useState<string[]>([])
+  const dispatch = useDispatch()
 
-const handleCheck = (name: string) => {
+const handleCheck = (category: Category, name: string) => {
   setChecked(prev =>
     prev.includes(name)
       ? prev.filter(n => n !== name) 
       : [...prev, name]             
   )
+  dispatch(addIngredient({category:category, ingredient:name}));
 }
   return <div className="grid">
     {(Object.entries(groceryList) as [Category, Ingredient[]][]).map(
@@ -26,7 +30,7 @@ const handleCheck = (name: string) => {
           <div className="cat-label">{category.toUpperCase()}</div>
           {ingredients.map((ingredient) => (
             <div className={`ingredient-card ${checked.includes(ingredient.name) ? 'checked' : ''}`} key={ingredient.name}>
-              <input type="checkbox" className="checkbox" onChange={() => handleCheck(ingredient.name)} />
+              <input type="checkbox" className="checkbox" onChange={() => handleCheck(category, ingredient.name)} />
               <div className="ing-info">
                 <div className='ing-name'>{ingredient.name}</div>
                 <div className="ing-recipes">

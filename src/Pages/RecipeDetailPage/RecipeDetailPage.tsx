@@ -16,6 +16,8 @@ import Nutrition from "../../components/NutritionalDetails/Nutrition";
 import { generateNutritionInfo } from "../../services/gemini";
 import { useState } from "react";
 import { IoMdNutrition } from "react-icons/io";
+import Skeleton from "react-loading-skeleton";
+import 'react-loading-skeleton/dist/skeleton.css';
 
 interface Step {
     step: string;
@@ -39,6 +41,7 @@ const initialNutritionData: Nutrition = {
 export default function RecipeDetailPage() {
     const { state } = useLocation();
     const [nutritionInfo, setNutritionInfo] = useState(initialNutritionData)
+    const [showSkeleton, setShowSkeleton] = useState(false)
     const [loadNutritionInfo, setLoadNutritionInfo] = useState(true);
     const { visible } = useSelector((state: RootState) => state.showDialog)
     const dispatch = useDispatch()
@@ -49,6 +52,7 @@ export default function RecipeDetailPage() {
                 <button className="Nutritioninfo" onClick={async () => {
                     try {
                         setLoadNutritionInfo(true);
+                        setShowSkeleton(true);
                         const data = await generateNutritionInfo(state);
                         console.log(data, "data")
                         setNutritionInfo(data);
@@ -57,6 +61,7 @@ export default function RecipeDetailPage() {
                     }
                     finally {
                         setLoadNutritionInfo(false);
+                        setShowSkeleton(false);
                     }
                 }}>
                     <IoMdNutrition size="1.8rem" />
@@ -110,16 +115,36 @@ export default function RecipeDetailPage() {
                     })}
                 </div>
             </div>
-            <div className="NutritionContainer">
-                {
-                    !loadNutritionInfo && <Nutrition
-                        fats={nutritionInfo.fats}
-                        protein={nutritionInfo.protein}
-                        carbs={nutritionInfo.carbs}
-                        overall_calories={nutritionInfo.overall_calories}
-                    />
-                }
-            </div>
+            {(
+                <div className="NutritionContainer">
+                    {showSkeleton && (
+                        <div style={{
+                            display: 'flex',
+                            borderRadius: '16px',
+                            padding: '1rem 1.25rem',
+                            width: '66rem',
+                            overflow: 'hidden'
+                        }}>
+                            <Skeleton
+                                count={4}
+                                height={40}
+                                baseColor="#f0e6dc"
+                                highlightColor="#faf0e8"
+                                borderRadius="12px"
+                                containerClassName="skeleton-container"
+                            />
+                        </div>
+                    )}
+                    {!loadNutritionInfo && (
+                        <Nutrition
+                            fats={nutritionInfo.fats}
+                            protein={nutritionInfo.protein}
+                            carbs={nutritionInfo.carbs}
+                            overall_calories={nutritionInfo.overall_calories}
+                        />
+                    )}
+                </div>
+            )}
         </div>
     )
 }

@@ -1,3 +1,12 @@
+
+
+export const initialShoppingData = {
+    "Dairy and Eggs": [],
+    "Meat": [],
+    "Pantry": [],
+    "Vegetables": []
+}
+
 export const RecipeCardData = [
     {
         "id":1,
