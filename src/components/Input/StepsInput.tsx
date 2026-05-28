@@ -15,7 +15,7 @@ export default function StepsToPrepareForm({ register, control, error }: {
 }) {
     const { fields, append, remove } = useFieldArray({
         control,
-        name: "stepsToPrepare"
+        name: "recipe_procedure"
     });
     return (
         <>
@@ -24,13 +24,13 @@ export default function StepsToPrepareForm({ register, control, error }: {
                     <>
                         <div className={styles.stepCards} key={step.id}>
                             <div className={styles.HeaderAndCrossButton}>
-                                <span {...register(`stepsToPrepare.${index}.step`)} className={styles.stepNumber}>Step {index + 1}</span>
+                                <span {...register(`recipe_procedure.${index}.step`)} className={styles.stepNumber}>Step {index + 1}</span>
                                 <RxCrossCircled onClick={() => {
                                     if (fields.length > 1)
                                         remove(index)
                                 }} style={{ cursor: "pointer" }} size="1.5rem" />
                             </div>
-                            <input className={styles.input} {...register(`stepsToPrepare.${index}.title`, {
+                            <input className={styles.input} {...register(`recipe_procedure.${index}.title`, {
                                 validate: {
                                     positive: (value) => value != "" || "This field cannot be blank",
                                     duplicateValue: (value: string) =>
@@ -41,7 +41,7 @@ export default function StepsToPrepareForm({ register, control, error }: {
                                 }
                             })} placeholder="Step title eg.Kneeding" />
                             <ErrorMessage error={error} index={index} value='title' />
-                            <textarea className={styles.textarea} {...register(`stepsToPrepare.${index}.text`, {
+                            <textarea className={styles.textarea} {...register(`recipe_procedure.${index}.text`, {
                                 validate: (value) => value != "" || "This field cannot be blank"
                             })} placeholder="Description of the step" />
                             <ErrorMessage error={error} index={index} value='text' />
@@ -49,16 +49,16 @@ export default function StepsToPrepareForm({ register, control, error }: {
                                 <HiOutlineClock size="1.2rem" color="#635c58" />
                                 <input className={styles.input} key={step.step}
                                     min={0}
-                                    {...register(`stepsToPrepare.${index}.timeToPrepare`, {
+                                    {...register(`recipe_procedure.${index}.timer`, {
                                         valueAsNumber: true,
                                     })} type="number" /> mins (Optional)
                             </div>
-                            <ErrorMessage error={error} index={index} value='timeToPrepare' />
+                            <ErrorMessage error={error} index={index} value='timer' />
                         </div>
                     </>
                 ))}
             </div>
-            <AddButton onClick={() => append({ step: fields.length + 1, 'text': '', timeToPrepare: 0, title: "" })}
+            <AddButton onClick={() => append({ step: fields.length + 1, 'text': '', timer: 0, title: "" })}
                 text="steps" />
         </>
     );
@@ -67,13 +67,13 @@ export default function StepsToPrepareForm({ register, control, error }: {
 export function ErrorMessage({ error, index, value }: {
     error: FieldErrors<MyFormValues>,
     index: number,
-    value: keyof MyFormValues['stepsToPrepare'][number]
+    value: keyof MyFormValues['recipe_procedure'][number]
 }) {
     return <div className="formError">
-        {error && error['stepsToPrepare'] &&
+        {error && error['recipe_procedure'] &&
             <RecipeDetails
                 icon={IoInformationCircle}
-                content={error?.stepsToPrepare?.[index]?.[value]?.message as string}
+                content={error?.recipe_procedure?.[index]?.[value]?.message as string}
                 fontSize={0.8}
                 size="1rem"
                 color="red"

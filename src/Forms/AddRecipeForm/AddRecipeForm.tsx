@@ -47,7 +47,7 @@ export default function AddRecipeForm() {
             }
         },
         {
-            InputElement: "input", inputType: "number", inputTitle: "preptime", inputHeader: "Prep time", rules: {
+            InputElement: "input", inputType: "number", inputTitle: "time_minutes", inputHeader: "Prep time", rules: {
                 required: "This field is required.",
                 // @ts-expect-error suppress warning
                 validate: { positive: (value: number) => value > 0 || 'Servings must be greater than 0.' }
@@ -57,13 +57,13 @@ export default function AddRecipeForm() {
     const dispatch = useDispatch()
     const defaultRecipeData = useMemo(() => ({
         title: "",
-        preptime: 0,
+        time_minutes: 0,
         servings: 0,
         description: "",
         likes: 0,
         tags: [{ name: "" }],
         ingredients: [{ name: "" }],
-        stepsToPrepare: [{ step: 1, title: "", text: "", timeToPrepare: 0 }],
+        recipe_procedure: [{ step: 1, title: "", text: "", timer: 0 }],
     }), [])
     const { control, register, handleSubmit, reset, unregister, formState: { errors }, getValues } = useForm<MyFormValues>({
         mode: "all",

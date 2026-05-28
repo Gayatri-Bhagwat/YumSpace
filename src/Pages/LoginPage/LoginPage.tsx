@@ -1,14 +1,42 @@
 import { useState } from "react";
 import { useNavigate } from "react-router";
+import { getApiToken } from "../../services/APIService";
+import type { Credentials, NotFound } from "../../Enums/Auth";
 
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState<boolean>(false);
+  const [error, setError] = useState<Credentials | NotFound | null>(null);
   const navigate = useNavigate();
-  
-  function Login(){
-    navigate("/home")
-  }
+
+  const isBlankFieldError = (error: Credentials | NotFound) => {
+    if ("email" in error || "password" in error) {
+      return true;
+    } else {
+      return false;
+    }
+  };
+  const Login = async () => {
+    setError(null);
+    setLoading(true);
+    const response = await getApiToken({ email: email, password: password });
+    if (response.success) {
+      setLoading(false);
+      localStorage.setItem("token", response.data.token);
+      navigate("/home");
+    } else if (!isBlankFieldError(response.errorDetails)) {
+      console.log(response);
+      setError({ details: response.errorDetails.details });
+      setLoading(false);
+    } else {
+      setError({
+        email: response.errorDetails.email,
+        password: response.errorDetails.password,
+      });
+      setLoading(false);
+    }
+  };
   return (
     <div
       style={{
@@ -56,6 +84,7 @@ export default function Login() {
             fontSize: "14px",
           }}
         />
+        {error && "email" in error ? <span>{error.email}</span> : ""}
 
         {/* Password */}
         <input
@@ -70,6 +99,7 @@ export default function Login() {
             fontSize: "14px",
           }}
         />
+        {error && "password" in error ? <span>{error.password}</span> : ""}
 
         {/* Button */}
         <button
@@ -84,11 +114,16 @@ export default function Login() {
             cursor: "pointer",
             transition: "0.2s",
           }}
-          onMouseEnter={(e) => ((e.target as HTMLElement).style.backgroundColor = "#d4662d")}
-          onMouseLeave={(e) => ((e.target as HTMLElement).style.backgroundColor = "#e8773d")}
+          onMouseEnter={(e) =>
+            ((e.target as HTMLElement).style.backgroundColor = "#d4662d")
+          }
+          onMouseLeave={(e) =>
+            ((e.target as HTMLElement).style.backgroundColor = "#e8773d")
+          }
         >
-          Login
+          {loading ? "Logging in..." : "Login"}
         </button>
+        {error && "details" in error ? <span>{error.details}</span> : ""}
       </div>
     </div>
   );

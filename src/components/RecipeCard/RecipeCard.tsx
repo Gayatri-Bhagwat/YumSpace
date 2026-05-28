@@ -10,7 +10,7 @@ import type { MyFormValues } from "../../Enums/FormFields";
 import { MdModeEdit } from "react-icons/md";
 import { useDispatch } from "react-redux";
 import { showRecipeForm } from "../../features/showRecipeForm/showRecipeSlice";
-import { generateNutritionInfo } from "../../services/gemini";
+// import { generateNutritionInfo } from "../../services/gemini";
 
 export interface RecipeTypes {
     title: string;
@@ -20,8 +20,8 @@ export interface RecipeTypes {
     image: string;
     servings: number;
     likes: number;
-    preptime: number;
-    stepsToPrepare?: { step: number, title: string, text: string, timeToPrepare: number }[];
+    time_minutes: number;
+    recipe_procedure?: { step: number, title: string, text: string, timer: number }[];
 }
 
 
@@ -30,6 +30,7 @@ export default function RecipeCard({ item }: { item: MyFormValues }) {
     
     const dispatch = useDispatch();
     const navigate = useNavigate();
+    console.log(item)
     return (
         <div className="RecipeCard"
             onMouseEnter={() => setHover(true)}
@@ -42,12 +43,12 @@ export default function RecipeCard({ item }: { item: MyFormValues }) {
                 <img src={item.image.toString()} alt={item.title} className={`RecipeImage`} />
                 <span className="RecipeTitle">{item.title}</span>
                 <div className="RecipeDetails">
-                    <RecipeDetails icon={CgLock} content={`${item.preptime} mins`} color="black" />
+                    <RecipeDetails icon={CgLock} content={`${item.time_minutes} mins`} color="black" />
                     <RecipeDetails icon={FaUserGroup} content={`${item.servings} servings`} color="black" />
                     <RecipeDetails icon={HiHeart} content={item.likes} color="black" />
                 </div>
                 <div className="Ingredients">
-                    {item.tags.map((tag, index) => (
+                    {item.tag.map((tag, index) => (
                         <Badge content={tag.name} key={index} isTag={false} />
                     ))}
                 </div>

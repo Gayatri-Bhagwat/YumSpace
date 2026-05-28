@@ -4,7 +4,7 @@ interface Step {
     step: string;
     title: string;
     text: string;
-    timeToPrepare: string;
+    timer: string;
 }
 
 export default function Instruction({ step }: { step: Step }) {
@@ -14,9 +14,9 @@ export default function Instruction({ step }: { step: Step }) {
             <div className="StepTitleAndDescription">
                 <span className="StepTitle">{step.title}</span>
                 <span className="StepDescription">{step.text}</span>
-                {Number(step.timeToPrepare) > 0 && <div className="PrepareTime">
+                {Number(step.timer) > 0 && <div className="PrepareTime">
                     <BsClock size={"1.2rem"} />
-                    <span>Start Timer ({step.timeToPrepare} min) </span>
+                    <span>Start Timer ({step.timer} min) </span>
                 </div>}
             </div>
         </div>

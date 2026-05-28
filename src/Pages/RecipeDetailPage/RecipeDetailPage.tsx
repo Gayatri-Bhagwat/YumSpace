@@ -23,7 +23,7 @@ interface Step {
     step: string;
     title: string;
     text: string;
-    timeToPrepare: string;
+    timer: string;
 }
 export interface Nutrition {
     fats: number;
@@ -40,6 +40,7 @@ const initialNutritionData: Nutrition = {
 }
 export default function RecipeDetailPage() {
     const { state } = useLocation();
+    console.log("state", state)
     const [nutritionInfo, setNutritionInfo] = useState(initialNutritionData)
     const [showSkeleton, setShowSkeleton] = useState(false)
     const [loadNutritionInfo, setLoadNutritionInfo] = useState(true);
@@ -73,7 +74,7 @@ export default function RecipeDetailPage() {
                     <RiDeleteBinLine size="1.8rem" />
                 </button>
                 <div className="TagListOverImage">
-                    {state.tags.map((tag: { name: string }) => {
+                    {state.tag.map((tag: { name: string }) => {
                         return <Badge content={tag.name} isTag={true} />
                     })}
                 </div>
@@ -83,7 +84,7 @@ export default function RecipeDetailPage() {
                 <Dialog message="Are you sure you want to delete" recipeTitle={state.title} />
             </div>}
             <div className="OtherRecipeDetails">
-                <RecipeComponents header="Prep Time" value={state.preptime} icon={BsClockFill} />
+                <RecipeComponents header="Prep Time" value={state.time_minutes} icon={BsClockFill} />
                 <RecipeComponents header="Servings" value={state.servings} icon={FaUserGroup} />
                 <RecipeComponents header="Likes" value={state.likes} icon={HiHeart} />
                 {!loadNutritionInfo && <RecipeComponents header="Calories in All" value={nutritionInfo.overall_calories} icon={HiFire} />}
@@ -98,7 +99,7 @@ export default function RecipeDetailPage() {
                         <span>Ingredients</span>
                     </div>
                     <div className="IngredientList" >
-                        {state.ingredients.map((ingredient: { name: string }) => {
+                        {state.ingredient.map((ingredient: { name: string }) => {
                             return <div>
                                 <FaSquareFull color="#393939" />
                                 <span>{ingredient.name}</span>
@@ -108,7 +109,7 @@ export default function RecipeDetailPage() {
                 </div>
                 <div className="StepsToPrepare" >
                     <span className="InstructionsHeader">Instructions</span>
-                    {state.stepsToPrepare.map((step: Step) => {
+                    {state.recipe_procedure.map((step: Step) => {
                         return (
                             <Instruction step={step} key={step.step} />
                         )

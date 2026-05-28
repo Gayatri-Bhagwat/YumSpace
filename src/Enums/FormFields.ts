@@ -4,13 +4,13 @@ export interface MyFormValues {
   id: number;
   title: string;
   description: string;
-  tags: { name: string }[];
-  ingredients: { name: string }[];
-  image: string | FileList
-  servings: number;
-  likes: number;
-  preptime: number;
-  stepsToPrepare: { step: number, title: string, text: string, timeToPrepare: number }[];
+  tag: { name: string }[]; 
+  ingredient: { name: string }[];
+  image:string | FileList
+  servings:number;
+  likes:number;
+  time_minutes:number;
+  recipe_procedure:{step: number, title:string, text:string, timer:number}[];
 }
 
 export interface FieldConfig {

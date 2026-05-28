@@ -14,6 +14,9 @@ export const RecipeSlice = createSlice({
   name: "addRecipeSlice",
   initialState,
   reducers: {
+    setRecipe: (state, action: PayloadAction<MyFormValues[]>) => {
+      state.recipe = action.payload;
+    },
     addRecipe: (state, action: PayloadAction<MyFormValues>) => {
       state.recipe.push(action.payload);
     },
@@ -30,10 +33,10 @@ export const RecipeSlice = createSlice({
       );
       console.log(recipeIndex);
       state.recipe.splice(recipeIndex, 1);
-    }
+    },
   },
 });
 
-export const { addRecipe, editRecipe, deleteRecipe } =
+export const { setRecipe, addRecipe, editRecipe, deleteRecipe } =
   RecipeSlice.actions;
 export default RecipeSlice.reducer;
