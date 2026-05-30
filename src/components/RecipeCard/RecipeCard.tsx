@@ -15,8 +15,8 @@ import { showRecipeForm } from "../../features/showRecipeForm/showRecipeSlice";
 export interface RecipeTypes {
     title: string;
     description: string;
-    tags: { name: string }[];
-    ingredients: { name: string }[];
+    tag: { name: string }[];
+    ingredient: { name: string }[];
     image: string;
     servings: number;
     likes: number;
@@ -30,7 +30,6 @@ export default function RecipeCard({ item }: { item: MyFormValues }) {
     
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    console.log(item)
     return (
         <div className="RecipeCard"
             onMouseEnter={() => setHover(true)}
@@ -40,7 +39,7 @@ export default function RecipeCard({ item }: { item: MyFormValues }) {
             }}
         >
             <div className="RecipeInfo">
-                <img src={item.image.toString()} alt={item.title} className={`RecipeImage`} />
+                <img src={item.image?.toString()} alt={item.title} className={`RecipeImage`} />
                 <span className="RecipeTitle">{item.title}</span>
                 <div className="RecipeDetails">
                     <RecipeDetails icon={CgLock} content={`${item.time_minutes} mins`} color="black" />

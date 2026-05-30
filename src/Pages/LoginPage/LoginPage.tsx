@@ -26,7 +26,6 @@ export default function Login() {
       localStorage.setItem("token", response.data.token);
       navigate("/home");
     } else if (!isBlankFieldError(response.errorDetails)) {
-      console.log(response);
       setError({ details: response.errorDetails.details });
       setLoading(false);
     } else {

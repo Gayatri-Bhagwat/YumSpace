@@ -56,8 +56,8 @@ export default function RecipeSelectionList({
         const data = await generateGroceryList(selectedRecipe.recipe);
         setGeneratedShoppingList(data);
         setIsFetched(true);
-      } catch (err: any) {
-        console.log(err.message);
+      } catch (err: unknown) {
+        console.log(err);
       } finally {
         setLoading(false);
       }

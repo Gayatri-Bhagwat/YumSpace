@@ -10,7 +10,7 @@ export default function TagIngredientInputForm({ header, register, control, name
     header: string,
     register: UseFormRegister<MyFormValues>,
     control: Control<MyFormValues>,
-    name: "tags" | "ingredients",
+    name: "tag" | "ingredient",
     error: FieldErrors<MyFormValues>
 }) {
     const { fields, append, remove } = useFieldArray({
@@ -38,9 +38,9 @@ export default function TagIngredientInputForm({ header, register, control, name
 
 export function TagIngredientInputElement({ register, fields, objectName, removeItem, error }: {
     register: UseFormRegister<MyFormValues>,
-    objectName: "tags" | "ingredients",
+    objectName: "tag" | "ingredient",
     removeItem: (index: number) => void,
-    fields: FieldArrayWithId<MyFormValues, "tags" | "ingredients">[],
+    fields: FieldArrayWithId<MyFormValues, "tag" | "ingredient">[],
     error: FieldErrors<MyFormValues>
 }) {
     const headerName = `${objectName.substring(0, objectName.length - 1)}`

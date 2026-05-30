@@ -8,7 +8,6 @@ export default function Tag() {
     console.log(recipe)
     const tagList = [...new Set(recipe.flatMap((r)=>r.tag.map((t)=>t.name)))]
 
-    console.log(tagList,"tags")
     return (
         <div className="TagCard">
             <div className="TagHeader">

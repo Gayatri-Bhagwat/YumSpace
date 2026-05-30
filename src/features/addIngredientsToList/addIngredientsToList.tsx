@@ -1,4 +1,4 @@
-import { createSlice, current, type PayloadAction } from "@reduxjs/toolkit";
+import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 import { initialShoppingData } from "../../TestData/TestData";
 import type { SelectedGroceryListEnum } from "../../Enums/FormFields";
 import type { Category } from "../../components/Grocery/Grocery";
@@ -21,10 +21,8 @@ export const createIngredientListSlice = createSlice({
     initialState:initialState,
     reducers:{
         addIngredient: (state, action:PayloadAction<AddIngredientPayload>) => {
-            console.log(current(state.groceryData))
            const {category, ingredient}= action.payload;
            state.groceryData[category].push(ingredient);
-           console.log(current(state.groceryData))
         }
     }
 })

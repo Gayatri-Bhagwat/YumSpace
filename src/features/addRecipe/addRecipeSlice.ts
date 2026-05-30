@@ -24,14 +24,12 @@ export const RecipeSlice = createSlice({
       const recipeIndex = state.recipe.findIndex(
         (r) => r.id === action.payload.id,
       );
-      console.log(recipeIndex);
       state.recipe[recipeIndex] = action.payload;
     },
     deleteRecipe: (state, action: PayloadAction<string>) => {
       const recipeIndex = state.recipe.findIndex(
         (r) => r.title === action.payload,
       );
-      console.log(recipeIndex);
       state.recipe.splice(recipeIndex, 1);
     },
   },

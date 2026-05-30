@@ -35,7 +35,6 @@ type Props = {
 };
 
 export const ShoppingListPDF = ({ groceryList }: Props) => {
-  console.log("printt", groceryList);
   return (
     <Document>
       <Page size="A4" style={styles.page}>

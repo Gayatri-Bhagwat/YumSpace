@@ -18,7 +18,6 @@ const initialSelectedRecipe: props = {
 
 export default function GenerateIngredientList() {
     const [selectedRecipe, setSelectedRecipe] = useState(initialSelectedRecipe)
-    console.log(selectedRecipe)
     const { recipe } = useSelector((state: RootState) => state.addRecipe)
     const dispatch = useDispatch()
     return (

@@ -6,7 +6,7 @@ export interface MyFormValues {
   description: string;
   tag: { name: string }[]; 
   ingredient: { name: string }[];
-  image:string | FileList
+  image:string | FileList | File
   servings:number;
   likes:number;
   time_minutes:number;

@@ -1,8 +1,11 @@
 import { PiNotePencilFill } from "react-icons/pi";
 import { RxCrossCircled } from "react-icons/rx";
-import "../AddRecipeForm/AddRecipeForm.css"
+import "../AddRecipeForm/AddRecipeForm.css";
 import { useForm } from "react-hook-form";
-import { FormInputBasicDetails, FormInputTimeAndServings } from "../../components/Input/Input";
+import {
+  FormInputBasicDetails,
+  FormInputTimeAndServings,
+} from "../../components/Input/Input";
 import TagIngredientInputForm from "../../components/Input/TagIngredientInput";
 import type { FieldConfig, MyFormValues } from "../../Enums/FormFields";
 import StepsToPrepareForm from "../../components/Input/StepsInput";
@@ -11,166 +14,249 @@ import { addRecipe, editRecipe } from "../../features/addRecipe/addRecipeSlice";
 import { hideRecipeForm } from "../../features/showRecipeForm/showRecipeSlice";
 import type { RootState } from "../../stores/store";
 import { useEffect, useMemo } from "react";
+import { addNewRecipe, editExistingRecipe } from "../../services/APIService";
 
 export default function AddRecipeForm() {
+  const { visible, selectedRecipe, mode } = useSelector(
+    (state: RootState) => state.showRecipe,
+  );
+  const basicDetailFields: FieldConfig[] = [
+    {
+      inputTitle: "title",
+      InputElement: "input",
+      inputHeader: "Recipe Title",
+      inputType: "text",
+      rules: {
+        required: "This field cannot be blank.",
+      },
+    },
+    {
+      inputTitle: "image",
+      InputElement: "input",
+      inputHeader: "Image URL",
+      inputType: "file",
+      rules: {
+        required: mode === "add" ? "This field cannot be blank." : false,
+      },
+    },
+    {
+      inputTitle: "description",
+      InputElement: "textarea",
+      inputHeader: "Description",
+      inputType: "text",
+      rules: {
+        required: "This field cannot be blank.",
+      },
+    },
+  ];
 
-    const { visible, selectedRecipe, mode } = useSelector((state: RootState) => state.showRecipe)
-    const basicDetailFields: FieldConfig[] = [
-        {
-            inputTitle: "title", InputElement: "input", inputHeader: "Recipe Title", inputType: "text", rules: {
-                required: "This field cannot be blank."
-            }
+  const timeServingsDetails: FieldConfig[] = [
+    {
+      inputType: "number",
+      inputTitle: "servings",
+      InputElement: "input",
+      inputHeader: "Servings",
+      rules: {
+        required: "This field is required.",
+        valueAsNumber: true,
+        validate: {
+          // @ts-expect-error suppress warning
+          positive: (value: number) =>
+            value > 0 || "Servings must be greater than 0.",
         },
-        {
-            inputTitle: "image", InputElement: "input", inputHeader: "Image URL", inputType: "file", rules: {
-                required: mode === 'add' ? "This field cannot be blank." : false
-            }
+      },
+    },
+    {
+      InputElement: "input",
+      inputType: "number",
+      inputTitle: "likes",
+      inputHeader: "Likes",
+      rules: {
+        required: "This field is required.",
+        valueAsNumber: true,
+      },
+    },
+    {
+      InputElement: "input",
+      inputType: "number",
+      inputTitle: "time_minutes",
+      inputHeader: "Prep time",
+      rules: {
+        required: "This field is required.",
+        valueAsNumber: true,
+        validate: {
+          // @ts-expect-error suppress warning
+          positive: (value: number) =>
+            value > 0 || "Servings must be greater than 0.",
         },
-        {
-            inputTitle: "description", InputElement: "textarea", inputHeader: "Description", inputType: "text", rules: {
-                required: "This field cannot be blank."
-            }
-        },
-    ];
+      },
+    },
+  ];
+  const dispatch = useDispatch();
+  const defaultRecipeData = useMemo(
+    () => ({
+      title: "",
+      time_minutes: 0,
+      servings: 0,
+      description: "",
+      price: 0,
+      likes: 0,
+      tag: [{ name: "" }],
+      ingredient: [{ name: "" }],
+      recipe_procedure: [{ step: 1, title: "", text: "", timer: 0 }],
+    }),
+    [],
+  );
+  const {
+    control,
+    register,
+    handleSubmit,
+    reset,
+    unregister,
+    formState: { errors },
+  } = useForm<MyFormValues>({
+    mode: "all",
+    defaultValues: selectedRecipe ?? defaultRecipeData,
+  });
 
-    const timeServingsDetails: FieldConfig[] = [
-        {
-            inputType: "number", inputTitle: "servings", InputElement: "input", inputHeader: "Servings", rules: {
-                required: "This field is required.",
-                // @ts-expect-error suppress warning
-                validate: { positive: (value: number) => value > 0 || 'Servings must be greater than 0.' }
-            }
-        },
-        {
-            InputElement: "input", inputType: "number", inputTitle: "likes", inputHeader: "Likes", rules: {
-                required: "This field is required.",
-            }
-        },
-        {
-            InputElement: "input", inputType: "number", inputTitle: "time_minutes", inputHeader: "Prep time", rules: {
-                required: "This field is required.",
-                // @ts-expect-error suppress warning
-                validate: { positive: (value: number) => value > 0 || 'Servings must be greater than 0.' }
-            }
-        }
-    ]
-    const dispatch = useDispatch()
-    const defaultRecipeData = useMemo(() => ({
-        title: "",
-        time_minutes: 0,
-        servings: 0,
-        description: "",
-        likes: 0,
-        tags: [{ name: "" }],
-        ingredients: [{ name: "" }],
-        recipe_procedure: [{ step: 1, title: "", text: "", timer: 0 }],
-    }), [])
-    const { control, register, handleSubmit, reset, unregister, formState: { errors }, getValues } = useForm<MyFormValues>({
-        mode: "all",
-        defaultValues: selectedRecipe ?? defaultRecipeData
-    });
+  const AddRecipeData = async (data: MyFormValues) => {
+    const imageVal: string | File =
+      data.image instanceof FileList
+        ? data.image[0]
+        : data.image instanceof File
+          ? data.image
+          : (data.image as string);
 
-    const AddRecipeData = (data: MyFormValues) => {
-        const imageVal = getValues("image")
-        const updatedData = {
-            ...data,
-            image: typeof imageVal === 'string' ? imageVal : URL.createObjectURL(imageVal[0] as File)
-        }
-        if (mode === 'add') {
-            dispatch(addRecipe(updatedData))
-            console.log(data, "Added recipe")
-        }
-        else {
-            dispatch(editRecipe(updatedData))
-        }
-        dispatch(hideRecipeForm())
+    let response = null;
+    const updatedData = {
+      ...data,
+      price: 200,
+      image:
+        imageVal instanceof File
+          ? URL.createObjectURL(imageVal) // 👈 string for Redux, no FileList
+          : imageVal,
+    };
+
+    if (mode === "add") {
+      response = await addNewRecipe({
+        ...data,
+        image: imageVal,
+      });
+      dispatch(addRecipe({ ...response.data, image: updatedData.image })); // 👈 use preview URL until refetch
+    } else {
+      response = await editExistingRecipe(data, data.id);
+      dispatch(editRecipe({ ...response.data, image: updatedData.image }));
     }
+    dispatch(hideRecipeForm());
+  };
 
-    useEffect(() => {
-        if (mode === 'edit' && selectedRecipe) {
-            reset(selectedRecipe)
-            // unregister('image')
-        }
-        else {
-            reset(defaultRecipeData)
-        }
-    }, [selectedRecipe, mode, defaultRecipeData, reset, unregister])
-    return (
-        <>
-            {visible && <form className="AddFormCard" >
-                <div
-                    className="FormHeader"
-                    style={{
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "space-between",
-                    }}
-                >
-                    <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-                        <div
-                            style={{
-                                width: "32px",
-                                height: "32px",
-                                borderRadius: "8px",
-                                background: "#fdf0e8",
-                                display: "flex",
-                                alignItems: "center",
-                                justifyContent: "center",
-                            }}
-                        >
-                            <PiNotePencilFill size="1.1rem" color="#e8773d" />
-                        </div>
-                        <div>
-                            <p style={{ margin: 0, fontSize: "medium", fontWeight: 600 }}>{mode !== 'add' ? "Edit" : "Add"} Recipe</p>
-                            <p style={{ margin: 0, fontSize: "small", color: "#888" }}>Fill in the details below</p>
-                        </div>
-                    </div>
-                    <RxCrossCircled onClick={() => dispatch(hideRecipeForm())} size="1.5rem" color="#e8773d" />
-                </div>
-                <hr></hr>
-                <div className="BasicRecipeInfo">
-                    <span style={{ fontWeight: 600, color: "#2d1f14" }}>BASIC INFO</span>
-                    <FormInputBasicDetails
-                        register={register}
-                        error={errors}
-                        formData={basicDetailFields}
-                    />
-                </div>
-                <div className="TimeAndServingDetails">
-                    <span style={{ fontWeight: 600, color: "#2d1f14" }}>TIME & SERVINGS</span>
-                    <FormInputTimeAndServings
-                        register={register}
-                        formData={timeServingsDetails}
-                        error={errors}
-                    />
-                </div>
-                <div className="TagsInput">
-                    <TagIngredientInputForm header="TAGS"
-                        register={register}
-                        control={control}
-                        name={"tags"}
-                        error={errors}
-                    />
-                </div>
-                <div className="IngredientInput">
-                    <TagIngredientInputForm header="INGREDIENTS"
-                        register={register}
-                        control={control}
-                        name={"ingredients"}
-                        error={errors}
-                    />
-                </div>
-                <div className="StepInput">
-                    <span style={{ fontWeight: 600, color: "#2d1f14" }}>STEPS</span>
-                    <StepsToPrepareForm register={register} control={control} error={errors} />
-                </div>
-                <div className="SaveButtonWrapper">
-                    <button className="SaveButton" type="button" onClick={handleSubmit(AddRecipeData)}>
-                        Save Recipe
-                    </button>
-                </div>
-            </form>
-            }
-        </>
-    )
+  useEffect(() => {
+    if (mode === "edit" && selectedRecipe) {
+      reset(selectedRecipe);
+      // unregister('image')
+    } else {
+      reset(defaultRecipeData);
+    }
+  }, [selectedRecipe, mode, defaultRecipeData, reset, unregister]);
+  return (
+    <>
+      {visible && (
+        <form className="AddFormCard">
+          <div
+            className="FormHeader"
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between",
+            }}
+          >
+            <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+              <div
+                style={{
+                  width: "32px",
+                  height: "32px",
+                  borderRadius: "8px",
+                  background: "#fdf0e8",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
+                <PiNotePencilFill size="1.1rem" color="#e8773d" />
+              </div>
+              <div>
+                <p style={{ margin: 0, fontSize: "medium", fontWeight: 600 }}>
+                  {mode !== "add" ? "Edit" : "Add"} Recipe
+                </p>
+                <p style={{ margin: 0, fontSize: "small", color: "#888" }}>
+                  Fill in the details below
+                </p>
+              </div>
+            </div>
+            <RxCrossCircled
+              onClick={() => dispatch(hideRecipeForm())}
+              size="1.5rem"
+              color="#e8773d"
+            />
+          </div>
+          <hr></hr>
+          <div className="BasicRecipeInfo">
+            <span style={{ fontWeight: 600, color: "#2d1f14" }}>
+              BASIC INFO
+            </span>
+            <FormInputBasicDetails
+              register={register}
+              error={errors}
+              formData={basicDetailFields}
+            />
+          </div>
+          <div className="TimeAndServingDetails">
+            <span style={{ fontWeight: 600, color: "#2d1f14" }}>
+              TIME & SERVINGS
+            </span>
+            <FormInputTimeAndServings
+              register={register}
+              formData={timeServingsDetails}
+              error={errors}
+            />
+          </div>
+          <div className="TagsInput">
+            <TagIngredientInputForm
+              header="TAGS"
+              register={register}
+              control={control}
+              name={"tag"}
+              error={errors}
+            />
+          </div>
+          <div className="IngredientInput">
+            <TagIngredientInputForm
+              header="INGREDIENTS"
+              register={register}
+              control={control}
+              name={"ingredient"}
+              error={errors}
+            />
+          </div>
+          <div className="StepInput">
+            <span style={{ fontWeight: 600, color: "#2d1f14" }}>STEPS</span>
+            <StepsToPrepareForm
+              register={register}
+              control={control}
+              error={errors}
+            />
+          </div>
+          <div className="SaveButtonWrapper">
+            <button
+              className="SaveButton"
+              type="button"
+              onClick={handleSubmit(AddRecipeData)}
+            >
+              Save Recipe
+            </button>
+          </div>
+        </form>
+      )}
+    </>
+  );
 }

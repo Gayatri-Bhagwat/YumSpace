@@ -40,7 +40,6 @@ const initialNutritionData: Nutrition = {
 }
 export default function RecipeDetailPage() {
     const { state } = useLocation();
-    console.log("state", state)
     const [nutritionInfo, setNutritionInfo] = useState(initialNutritionData)
     const [showSkeleton, setShowSkeleton] = useState(false)
     const [loadNutritionInfo, setLoadNutritionInfo] = useState(true);
@@ -55,7 +54,6 @@ export default function RecipeDetailPage() {
                         setLoadNutritionInfo(true);
                         setShowSkeleton(true);
                         const data = await generateNutritionInfo(state);
-                        console.log(data, "data")
                         setNutritionInfo(data);
                     } catch (error) {
                         console.error("AI Error:", error);
@@ -69,7 +67,6 @@ export default function RecipeDetailPage() {
                 </button>
                 <button className="DeleteRecipe" onClick={() => {
                     dispatch(showDialog())
-                    console.log("dialog shown")
                 }}>
                     <RiDeleteBinLine size="1.8rem" />
                 </button>
