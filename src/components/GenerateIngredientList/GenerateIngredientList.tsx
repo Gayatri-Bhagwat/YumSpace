@@ -18,8 +18,9 @@ const initialSelectedRecipe: props = {
 
 export default function GenerateIngredientList() {
     const [selectedRecipe, setSelectedRecipe] = useState(initialSelectedRecipe)
-    const { recipe } = useSelector((state: RootState) => state.addRecipe)
+    const { recipe, filteredRecipeData } = useSelector((state: RootState) => state.addRecipe)
     const dispatch = useDispatch()
+    const recipeToDisplay = filteredRecipeData.length === 0 ? recipe : filteredRecipeData
     return (
         <div className="GenerateIngredientList">
             <div className="GenerateIngredientListHeader">
@@ -29,7 +30,7 @@ export default function GenerateIngredientList() {
                 </div>
                 <RxCross2 size="2rem" style={{ cursor: "pointer" }} onClick={() => dispatch(hideIngredientDialog())} />
             </div>
-            <RecipeSelectionList recipe={recipe} selectedRecipe={selectedRecipe} setSelectedRecipe={setSelectedRecipe} />
+            <RecipeSelectionList recipe={recipeToDisplay} selectedRecipe={selectedRecipe} setSelectedRecipe={setSelectedRecipe} />
 
         </div>
     )

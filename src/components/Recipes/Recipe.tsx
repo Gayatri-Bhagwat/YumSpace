@@ -23,10 +23,14 @@ import { setRecipe } from "../../features/addRecipe/addRecipeSlice";
 
 export default function Recipe() {
   const dispatch = useDispatch();
-  const recipes = useSelector((state: RootState) => state.addRecipe.recipe);
+  const { recipe, filteredRecipeData } = useSelector(
+    (state: RootState) => state.addRecipe,
+  );
+  const recipeToDisplay =
+    filteredRecipeData.length === 0 ? recipe : filteredRecipeData;
   useEffect(() => {
     const fetchAllRecipes = async () => {
-      const response = await getAllRecipes();
+      const response = await getAllRecipes("");
 
       if (response.success && response.data) {
         // ASSIGNMENT HAPPENS HERE:
@@ -43,13 +47,12 @@ export default function Recipe() {
   );
   return (
     <div className="RecipeSection">
-      <div className="GenerateIngredients"></div>
       <div className="RecipeHeader">
         <RecipeDetails
           icon={LuCookingPot}
           size={"2rem"}
           color="e8773d"
-          content={`${recipes.length} Results Found for Searched Recipe`}
+          content={`${recipeToDisplay.length} Results Found for Searched Recipe`}
         />
         <div className="ButtonContainer">
           <button
@@ -110,7 +113,7 @@ export default function Recipe() {
         </div>
       </div>
       <div className="RecipeGrid">
-        {recipes.map((recipe) => (
+        {recipeToDisplay.map((recipe) => (
           <RecipeCard key={recipe.title} item={recipe} />
         ))}
       </div>

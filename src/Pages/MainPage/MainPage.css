@@ -18,6 +18,10 @@
     margin-top:5rem;
 }
 
+.RecipeContent {
+    flex:1
+}
+
 @media (max-width: 768px) {
     
     .TopCard {

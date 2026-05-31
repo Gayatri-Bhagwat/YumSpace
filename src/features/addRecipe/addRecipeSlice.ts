@@ -4,10 +4,12 @@ import type { MyFormValues } from "../../Enums/FormFields";
 
 interface RecipeState {
   recipe: MyFormValues[];
+  filteredRecipeData: MyFormValues[]
 }
 
 const initialState: RecipeState = {
   recipe: RecipeCardData,
+  filteredRecipeData: []
 };
 
 export const RecipeSlice = createSlice({
@@ -15,7 +17,13 @@ export const RecipeSlice = createSlice({
   initialState,
   reducers: {
     setRecipe: (state, action: PayloadAction<MyFormValues[]>) => {
-      state.recipe = action.payload;
+      if (state.filteredRecipeData.length !== 0)
+      {
+        state.recipe = state.filteredRecipeData
+      }
+      else{
+        state.recipe = action.payload
+      }
     },
     addRecipe: (state, action: PayloadAction<MyFormValues>) => {
       state.recipe.push(action.payload);
@@ -32,9 +40,12 @@ export const RecipeSlice = createSlice({
       );
       state.recipe.splice(recipeIndex, 1);
     },
+    searchRecipe: (state, action:PayloadAction<MyFormValues[]>) => {
+      state.filteredRecipeData = action.payload
+    }
   },
 });
 
-export const { setRecipe, addRecipe, editRecipe, deleteRecipe } =
+export const { setRecipe, addRecipe, editRecipe, deleteRecipe, searchRecipe } =
   RecipeSlice.actions;
 export default RecipeSlice.reducer;

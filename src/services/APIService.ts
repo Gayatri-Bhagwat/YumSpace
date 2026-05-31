@@ -1,7 +1,7 @@
 import type { Credentials } from "../Enums/Auth";
 import type { MyFormValues } from "../Enums/FormFields";
 
-const base_url = "";
+const base_url = import.meta.env.BASE_URL;
 export const getHeaders = () => ({
   "Content-Type": "application/x-www-form-urlencoded",
   Authorization: `Token ${localStorage.getItem("token")}`,
@@ -17,6 +17,11 @@ export const API = {
       headers: getHeaders(),
       method: "POST",
       body: new URLSearchParams(body),
+    }),
+  getWithParams: (path: string, params: Record<string, string>) =>
+    fetch(`${base_url}${path}?${new URLSearchParams(params)}`, {
+      headers: getHeaders(),
+      method: "GET",
     }),
 };
 
@@ -44,10 +49,13 @@ export const getApiToken = async (data: Credentials) => {
   }
 };
 
-export const getAllRecipes = async () => {
+export const getAllRecipes = async (search: Record<string, string>) => {
   try {
-    const response = await API.get("api/recipe/recipes/");
-    console.log(localStorage.getItem("token"));
+    const response = 
+      search.search?.trim() === ""
+        ? await API.get("api/recipe/recipes/")
+        : await API.getWithParams("api/recipe/recipes/", search);
+    console.log(response);
     if (!response.ok) {
       const errorData = await response.json();
       return {
@@ -71,11 +79,11 @@ export const getAllRecipes = async () => {
 export const editExistingRecipe = async (data: MyFormValues, id: number) => {
   try {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const {image, ...recipeData} = data
+    const { image, ...recipeData } = data;
     const response = await fetch(`${base_url}/api/recipe/recipes/${id}/`, {
       method: "PATCH",
       headers: getHeadersForMultipart(),
-      body: JSON.stringify(recipeData)
+      body: JSON.stringify(recipeData),
     });
     if (!response.ok) {
       const errorData = await response.json();
@@ -100,12 +108,12 @@ export const editExistingRecipe = async (data: MyFormValues, id: number) => {
 export const deleteExistingRecipe = async (id: number) => {
   try {
     const response = await fetch(`${base_url}/api/recipe/recipes/${id}/`, {
-      method:"DELETE",
-      headers:{
-        Authorization: `Token ${localStorage.getItem('token')}`
+      method: "DELETE",
+      headers: {
+        Authorization: `Token ${localStorage.getItem("token")}`,
       },
-    })
-    console.log("Response delete", response)
+    });
+    console.log("Response delete", response);
     if (!response.ok) {
       const errorData = await response.json();
       return {
@@ -115,7 +123,7 @@ export const deleteExistingRecipe = async (id: number) => {
       };
     }
 
-   return await response
+    return await response;
   } catch (networkError: unknown) {
     return {
       success: false,
@@ -123,7 +131,7 @@ export const deleteExistingRecipe = async (id: number) => {
       status: 0,
     };
   }
-}
+};
 
 export const addNewRecipe = async (data: MyFormValues) => {
   try {
@@ -135,14 +143,18 @@ export const addNewRecipe = async (data: MyFormValues) => {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "Authorization": `Token ${localStorage.getItem("token")}`,
+        Authorization: `Token ${localStorage.getItem("token")}`,
       },
       body: JSON.stringify(recipeData),
     });
 
     if (!response.ok) {
       const errorData = await response.json();
-      return { success: false, errorDetails: errorData, status: response.status };
+      return {
+        success: false,
+        errorDetails: errorData,
+        status: response.status,
+      };
     }
 
     const createdRecipe = await response.json();
@@ -154,7 +166,7 @@ export const addNewRecipe = async (data: MyFormValues) => {
       formData.append("image", data.image[0]);
     } else if (data.image instanceof File) {
       formData.append("image", data.image);
-    } else if (typeof data.image === 'string') {
+    } else if (typeof data.image === "string") {
       formData.append("image", data.image);
     }
 
@@ -163,21 +175,27 @@ export const addNewRecipe = async (data: MyFormValues) => {
       {
         method: "POST",
         headers: {
-          "Authorization": `Token ${localStorage.getItem("token")}`,
+          Authorization: `Token ${localStorage.getItem("token")}`,
         },
         body: formData,
-      }
+      },
     );
 
     if (!imgResponse.ok) {
       const errorData = await imgResponse.json();
-      return { success: false, errorDetails: errorData, status: imgResponse.status };
+      return {
+        success: false,
+        errorDetails: errorData,
+        status: imgResponse.status,
+      };
     }
 
     return { success: true, data: createdRecipe, status: response.status };
-
   } catch (networkError: unknown) {
-    return { success: false, errorDetails: { detail: networkError }, status: 0 };
+    return {
+      success: false,
+      errorDetails: { detail: networkError },
+      status: 0,
+    };
   }
 };
-

@@ -4,9 +4,10 @@ import "./Tag.css"
 import type { RootState } from "../../stores/store"
 
 export default function Tag() {
-    const {recipe} = useSelector((state: RootState) => state.addRecipe)
+    const {recipe, filteredRecipeData} = useSelector((state: RootState) => state.addRecipe)
     console.log(recipe)
-    const tagList = [...new Set(recipe.flatMap((r)=>r.tag.map((t)=>t.name)))]
+    const recipeToDisplay = filteredRecipeData.length === 0 ? recipe : filteredRecipeData
+    const tagList = [...new Set(recipeToDisplay.flatMap((r)=>r.tag.map((t)=>t.name)))]
 
     return (
         <div className="TagCard">

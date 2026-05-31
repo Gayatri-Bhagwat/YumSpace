@@ -3,7 +3,8 @@ import "./User.css"
 import { useSelector } from "react-redux";
 import type { RootState } from "../../stores/store";
 export default function UserProfile() {
-    const {recipe} = useSelector((state: RootState) => state.addRecipe)
+    const {recipe, filteredRecipeData} = useSelector((state: RootState) => state.addRecipe)
+    const recipeToDisplay = filteredRecipeData.length === 0 ? recipe : filteredRecipeData
     return (
         <div className="Parent">
 
@@ -20,7 +21,7 @@ export default function UserProfile() {
                         amet consectetur adipisicing elit.</h4>
                     <div className="TotalRecipeButton">
                         <span>
-                            <PiChefHat fontSize={"1.8rem"} color="#e8773d" /> {recipe.length} Recipes
+                            <PiChefHat fontSize={"1.8rem"} color="#e8773d" /> {recipeToDisplay.length} Recipes
                         </span>
                     </div>
                 </div>
