@@ -1,8 +1,11 @@
 import { PiChefHat } from "react-icons/pi"
 import "./HeaderStyles.css"
 import Search from "../Search/Search"
+import { useSelector } from "react-redux"
+import type { RootState } from "../../stores/store"
 
 export default function Header() {
+    const { recipe } = useSelector((state: RootState) => state.addRecipe)
     return (
         <div className="topHeader">
             <div className="HeaderCard">
@@ -17,7 +20,7 @@ export default function Header() {
                 <div className="Search">
                     <Search />
                 </div>
-                <span className="TotalRecipesFound">24 Recipes Found</span>
+                <span className="TotalRecipesFound">{recipe.length} Recipes Found</span>
             </div>
             <hr style={{ border: "0.1px solid #eee9e9" }}></hr>
         </div>

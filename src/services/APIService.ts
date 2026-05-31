@@ -97,6 +97,34 @@ export const editExistingRecipe = async (data: MyFormValues, id: number) => {
   }
 };
 
+export const deleteExistingRecipe = async (id: number) => {
+  try {
+    const response = await fetch(`${base_url}/api/recipe/recipes/${id}/`, {
+      method:"DELETE",
+      headers:{
+        Authorization: `Token ${localStorage.getItem('token')}`
+      },
+    })
+    console.log("Response delete", response)
+    if (!response.ok) {
+      const errorData = await response.json();
+      return {
+        success: false,
+        errorDetails: errorData,
+        status: response.status,
+      };
+    }
+
+   return await response
+  } catch (networkError: unknown) {
+    return {
+      success: false,
+      errorDetails: { detail: networkError },
+      status: 0,
+    };
+  }
+}
+
 export const addNewRecipe = async (data: MyFormValues) => {
   try {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -152,3 +180,4 @@ export const addNewRecipe = async (data: MyFormValues) => {
     return { success: false, errorDetails: { detail: networkError }, status: 0 };
   }
 };
+

@@ -43,7 +43,7 @@ export function TagIngredientInputElement({ register, fields, objectName, remove
     fields: FieldArrayWithId<MyFormValues, "tag" | "ingredient">[],
     error: FieldErrors<MyFormValues>
 }) {
-    const headerName = `${objectName.substring(0, objectName.length - 1)}`
+    const headerName = `${objectName.substring(0, objectName.length)}`
     return (
         <div className={styles.InputWithButton} key={crypto.randomUUID()} style={{ display: "flex", flexDirection: "column" }}>
             {fields.map((field, index) => (

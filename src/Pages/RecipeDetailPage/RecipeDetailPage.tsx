@@ -78,7 +78,7 @@ export default function RecipeDetailPage() {
                 <h1>{state.title}</h1>
             </div>
             {visible && <div className="DialogContainer">
-                <Dialog message="Are you sure you want to delete" recipeTitle={state.title} />
+                <Dialog message="Are you sure you want to delete" recipe={state} />
             </div>}
             <div className="OtherRecipeDetails">
                 <RecipeComponents header="Prep Time" value={state.time_minutes} icon={BsClockFill} />

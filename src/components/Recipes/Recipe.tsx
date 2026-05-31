@@ -49,7 +49,7 @@ export default function Recipe() {
           icon={LuCookingPot}
           size={"2rem"}
           color="e8773d"
-          content={"24 Results Found for Searched Recipe"}
+          content={`${recipes.length} Results Found for Searched Recipe`}
         />
         <div className="ButtonContainer">
           <button
