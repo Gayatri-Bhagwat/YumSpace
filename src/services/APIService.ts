@@ -2,14 +2,24 @@ import type { Credentials } from "../Enums/Auth";
 import type { MyFormValues } from "../Enums/FormFields";
 
 const base_url = import.meta.env.BASE_URL;
+
+const getCookie = (name: string): string => {
+  const value = `; ${document.cookie}`;
+  const parts = value.split(`; ${name}=`);
+  if (parts.length === 2) return parts.pop()?.split(";").shift() ?? "";
+  return "";
+};
+
 export const getHeaders = () => ({
   "Content-Type": "application/x-www-form-urlencoded",
   Authorization: `Token ${localStorage.getItem("token")}`,
+  "X-CSRFToken": getCookie("csrftoken"),
 });
 export const getHeadersForMultipart = () => ({
   "Content-Type": "application/json",
   Authorization: `Token ${localStorage.getItem("token")}`,
 });
+
 export const API = {
   get: (path: string) => fetch(`${base_url}${path}`, { headers: getHeaders() }),
   postToken: (path: string, body: Credentials) =>
@@ -51,7 +61,7 @@ export const getApiToken = async (data: Credentials) => {
 
 export const getAllRecipes = async (search: Record<string, string>) => {
   try {
-    const response = 
+    const response =
       search.search?.trim() === ""
         ? await API.get("api/recipe/recipes/")
         : await API.getWithParams("api/recipe/recipes/", search);
@@ -80,10 +90,11 @@ export const editExistingRecipe = async (data: MyFormValues, id: number) => {
   try {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { image, ...recipeData } = data;
-    const response = await fetch(`${base_url}/api/recipe/recipes/${id}/`, {
+    const response = await fetch(`${base_url}api/recipe/recipes/${id}/`, {
       method: "PATCH",
       headers: getHeadersForMultipart(),
       body: JSON.stringify(recipeData),
+      
     });
     if (!response.ok) {
       const errorData = await response.json();
@@ -107,9 +118,10 @@ export const editExistingRecipe = async (data: MyFormValues, id: number) => {
 
 export const deleteExistingRecipe = async (id: number) => {
   try {
-    const response = await fetch(`${base_url}/api/recipe/recipes/${id}/`, {
+    const response = await fetch(`${base_url}api/recipe/recipes/${id}/`, {
       method: "DELETE",
       headers: {
+        "X-CSRFToken": getCookie("csrftoken"),
         Authorization: `Token ${localStorage.getItem("token")}`,
       },
     });
@@ -139,9 +151,10 @@ export const addNewRecipe = async (data: MyFormValues) => {
     const { image, ...recipeData } = data;
 
     // Step 1 — create recipe as JSON (no image)
-    const response = await fetch(`${base_url}/api/recipe/recipes/`, {
+    const response = await fetch(`${base_url}api/recipe/recipes/`, {
       method: "POST",
       headers: {
+        "X-CSRFToken": getCookie("csrftoken"),
         "Content-Type": "application/json",
         Authorization: `Token ${localStorage.getItem("token")}`,
       },
@@ -171,7 +184,7 @@ export const addNewRecipe = async (data: MyFormValues) => {
     }
 
     const imgResponse = await fetch(
-      `${base_url}/api/recipe/recipes/${createdRecipe.id}/upload-image/`,
+      `${base_url}api/recipe/recipes/${createdRecipe.id}/upload-image/`,
       {
         method: "POST",
         headers: {

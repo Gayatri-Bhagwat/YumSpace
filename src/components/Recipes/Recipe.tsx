@@ -30,7 +30,7 @@ export default function Recipe() {
     filteredRecipeData.length === 0 ? recipe : filteredRecipeData;
   useEffect(() => {
     const fetchAllRecipes = async () => {
-      const response = await getAllRecipes("");
+      const response = await getAllRecipes({search:""});
 
       if (response.success && response.data) {
         // ASSIGNMENT HAPPENS HERE:
