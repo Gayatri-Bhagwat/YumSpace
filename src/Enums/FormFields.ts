@@ -11,6 +11,7 @@ export interface MyFormValues {
   likes:number;
   time_minutes:number;
   recipe_procedure:{step: number, title:string, text:string, timer:number}[];
+  created_at:string
 }
 
 export interface FieldConfig {

@@ -48,7 +48,7 @@ export default function RecipeSelectionList({
     useState(initialShoppingData);
   const [loading, setLoading] = useState(false);
   const [isFetched, setIsFetched] = useState(false);
-
+  const [checked, setChecked] = useState<string[]>([]);
   const shoppingList = async () => {
     if (selectedRecipe.count != 0) {
       try {
@@ -62,6 +62,16 @@ export default function RecipeSelectionList({
         setLoading(false);
       }
     }
+  };
+
+  const printShoppingList = () => {
+    const newList = Object.fromEntries(
+      Object.entries(generatedShoppingList).map(([category, ingredients]) => [
+        category,
+        ingredients.filter((item) => !checked.includes(item.name)),
+      ]),
+    ) as GroceryList;
+    return newList;
   };
 
   return (
@@ -111,42 +121,44 @@ export default function RecipeSelectionList({
               />
             </div>
 
-              <PDFDownloadLink
-                document={
-                  <ShoppingListPDF groceryList={generatedShoppingList} />
-                }
-                fileName="shopping-list.pdf"
-                style={{ textDecoration: "none" }}
-              >
-                {({ loading: pdfLoading }) => (
-                  <button
+            <PDFDownloadLink
+              document={<ShoppingListPDF groceryList={printShoppingList()} />}
+              fileName="shopping-list.pdf"
+              style={{ textDecoration: "none" }}
+            >
+              {({ loading: pdfLoading }) => (
+                <button
                   className="GenerateListButton"
-                    style={{
-                      outline: "none",
-                      border: "none",
-                      fontSize: "18px",
-                      width: "26rem",
-                      height:"3rem",
-                      borderRadius:"0.5rem",
-                      color: "white",
-                      cursor: "pointer",
-                      backgroundColor: "#ff6b35",
-                    }}
-                  >
-                    <RecipeDetails
-                      icon={IoPrintSharp}
-                      content={
-                        pdfLoading ? "Preparing PDF..." : "Print Shopping List"
-                      }
-                      color="white"
-                      size="1.2rem"
-                    />
-                  </button>
-                )}
-              </PDFDownloadLink>
+                  style={{
+                    outline: "none",
+                    border: "none",
+                    fontSize: "18px",
+                    width: "26rem",
+                    height: "3rem",
+                    borderRadius: "0.5rem",
+                    color: "white",
+                    cursor: "pointer",
+                    backgroundColor: "#ff6b35",
+                  }}
+                >
+                  <RecipeDetails
+                    icon={IoPrintSharp}
+                    content={
+                      pdfLoading ? "Preparing PDF..." : "Print Shopping List"
+                    }
+                    color="white"
+                    size="1.2rem"
+                  />
+                </button>
+              )}
+            </PDFDownloadLink>
           </div>
 
-          <GroceryList groceryList={generatedShoppingList} />
+          <GroceryList
+            checked={checked}
+            setChecked={setChecked}
+            groceryList={generatedShoppingList}
+          />
 
           <div className="groceryListHeader">
             <button

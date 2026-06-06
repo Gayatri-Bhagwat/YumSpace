@@ -1,4 +1,3 @@
-import { useState } from "react"
 import type { Ingredient } from "../../Enums/FormFields"
 import "../Grocery/Grocery.css"
 import { useDispatch } from "react-redux"
@@ -9,20 +8,22 @@ export type Category = "Dairy and Eggs" | "Meat" | "Pantry" | "Vegetables"
 
 
 type GroceryList = Record<Category, Ingredient[]>
-export default function GroceryList({ groceryList }: {
-  groceryList: GroceryList
+export default function GroceryList({ groceryList, checked, setChecked }: {
+  groceryList: GroceryList,
+  checked: string[],
+  setChecked: React.Dispatch<React.SetStateAction<string[]>>
 }) {
-  const [checked, setChecked] = useState<string[]>([])
   const dispatch = useDispatch()
 
-const handleCheck = (category: Category, name: string) => {
-  setChecked(prev =>
-    prev.includes(name)
-      ? prev.filter(n => n !== name) 
-      : [...prev, name]             
-  )
-  dispatch(addIngredient({category:category, ingredient:name}));
-}
+  const handleCheck = (category: Category, name: string) => {
+    setChecked(prev =>
+      prev.includes(name)
+        ? prev.filter(n => n !== name) 
+        : [...prev, name]             
+    )
+    dispatch(addIngredient({category:category, ingredient:name}));
+    console.log(checked)
+  }
   return <div className="grid">
     {(Object.entries(groceryList) as [Category, Ingredient[]][]).map(
       ([category, ingredients]) => (

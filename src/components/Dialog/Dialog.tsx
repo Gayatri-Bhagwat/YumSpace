@@ -15,7 +15,6 @@ export default function Dialog({ message, recipe }: { message: string, recipe: M
     const onDeleteRecipe = async () => {
         dispatch(deleteRecipe(recipe.title))
         const response = await deleteExistingRecipe(recipe.id)
-        console.log(response)
         if (response.status === 204){
             navigate('/home')
         }

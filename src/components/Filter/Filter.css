@@ -1,7 +1,7 @@
 .FilterCard {
 border:1px solid #eee9e9;
   border-radius: 1.2rem;
-  height: 16rem;
+  height: 17rem;
   width: 20.8rem;
   margin: 0.5rem;
   padding:1rem;
@@ -22,4 +22,16 @@ border:1px solid #eee9e9;
     font-size: large;
     line-height: 2rem;
     margin:0.5rem 0rem 0.5rem 0.2rem;
+}
+.clearFilters {
+    width: 100%;
+    background-color: #e8773d;
+    outline: none;
+    border:none;
+    font-size: medium;
+    color:white;
+    margin-top: 18px;
+    border-radius:0.6rem;
+    padding:0.3rem;
+    cursor: pointer;
 }

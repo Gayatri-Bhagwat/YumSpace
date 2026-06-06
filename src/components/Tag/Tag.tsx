@@ -5,7 +5,6 @@ import type { RootState } from "../../stores/store"
 
 export default function Tag() {
     const {recipe, filteredRecipeData} = useSelector((state: RootState) => state.addRecipe)
-    console.log(recipe)
     const recipeToDisplay = filteredRecipeData.length === 0 ? recipe : filteredRecipeData
     const tagList = [...new Set(recipeToDisplay.flatMap((r)=>r.tag.map((t)=>t.name)))]
 

@@ -89,7 +89,6 @@ export const generateGroceryList = async (recipeTitles: string[]): Promise<Groce
   })
 
   const groceryList: GroceryList = JSON.parse(result.response.text())
-  console.log(groceryList)
   return groceryList
 }
 
@@ -136,6 +135,5 @@ export const generateNutritionInfo = async (recipe: MyFormValues): Promise<Nutri
   })
 
   const NutritionalInformation: Nutrition = JSON.parse(result.response.text())
-  console.log(NutritionalInformation, "information")
   return NutritionalInformation;
 }

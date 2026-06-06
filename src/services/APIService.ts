@@ -59,10 +59,10 @@ export const getApiToken = async (data: Credentials) => {
   }
 };
 
-export const getAllRecipes = async (search: Record<string, string>) => {
+export const getAllRecipes = async (search: Record<string, string>, getAllData:boolean) => {
   try {
     const response =
-      search.search?.trim() === ""
+      getAllData
         ? await API.get("api/recipe/recipes/")
         : await API.getWithParams("api/recipe/recipes/", search);
     console.log(response);

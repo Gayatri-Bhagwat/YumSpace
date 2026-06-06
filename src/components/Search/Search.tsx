@@ -11,7 +11,7 @@ export default function Search() {
 
   const handleSearch = async () => {
     console.log(search);
-    const response = await getAllRecipes({search:search});
+    const response = await getAllRecipes({search:search}, false);
     console.log(response.data);
     dispatch(searchRecipe(response.data)); // searchRecipe now correctly refers to the Redux action
   };
