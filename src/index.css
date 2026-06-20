@@ -1,1 +1,6 @@
 @import './Pages/MainPage/MainPage.css';
+
+body {
+  background-color: #FFF7F2;
+  color: #2d1f14;
+}

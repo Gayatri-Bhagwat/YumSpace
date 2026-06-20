@@ -1,10 +1,11 @@
 .FilterCard {
-border:1px solid #eee9e9;
+  border: 1px solid #eee9e9;
   border-radius: 1.2rem;
-  height: 17rem;
   width: 20.8rem;
   margin: 0.5rem;
-  padding:1rem;
+  padding: 1rem;
+  box-sizing: border-box;
+  background: white;
 }
 
 .FilterHeader span {

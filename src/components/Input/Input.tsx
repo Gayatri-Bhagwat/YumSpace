@@ -21,9 +21,8 @@ export function FormInput({ register, width, error, field }: {
     return (
         <div className={styles.InputElement}>
             <span>{inputHeader}</span>
-            <InputElement className={`${inputType} == 'textarea' ? ${styles.textarea} : ${styles.input}`}
+            <InputElement className={InputElement === 'textarea' ? styles.textarea : styles.input}
                 placeholder={`Add ${inputTitle.at(0)?.toUpperCase() + inputTitle.substring(1, inputTitle.length)}`}
-                style={{ width: `${width}rem` }}
                 type={inputType}
                 min={0}
                 {...register(inputTitle, rules)}
@@ -66,7 +65,6 @@ export function FormInputTimeAndServings({ register, error, formData }: Props) {
                     register={register}
                     error={error}
                     field={field}
-                    width={8.75}
                 />
             ))}
         </div>

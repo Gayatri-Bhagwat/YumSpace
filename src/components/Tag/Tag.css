@@ -1,9 +1,10 @@
 .TagCard {
-  border:1px solid #eee9e9;
+  border: 1px solid #eee9e9;
   width: 20.8rem;
   border-radius: 1.2rem;
   margin: 0rem 0rem 0.5rem 0.5rem;
-  padding:1rem;
+  padding: 1rem;
+  background: white;
 }
 
 .TagList{
@@ -14,8 +15,9 @@
 }
 
 .TagHeader span {
-   font-weight: 500;
-   font-size: larger;
-   padding-left: 0.3rem;
+    font-weight: 600;
+    font-size: 1rem;
+    color: #2d1f14;
+    padding-left: 0.3rem;
 }
 

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import { getApiToken } from "../../services/APIService";
 import type { Credentials, NotFound } from "../../Enums/Auth";
@@ -9,6 +9,12 @@ export default function Login() {
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<Credentials | NotFound | null>(null);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (localStorage.getItem("token")) {
+      navigate("/home");
+    }
+  }, [navigate]);
 
   const isBlankFieldError = (error: Credentials | NotFound) => {
     if ("email" in error || "password" in error) {
@@ -23,10 +29,9 @@ export default function Login() {
     const response = await getApiToken({ email: email, password: password });
     if (response.success) {
       setLoading(false);
-      localStorage.setItem("token", response.data.token);
-      navigate("/home");
+      navigate("/home", {state:{'headline':response.data.headline, 'user_name':response.data.user_name}});
     } else if (!isBlankFieldError(response.errorDetails)) {
-      setError({ details: response.errorDetails.details });
+      setError({ details: response.errorDetails.error });
       setLoading(false);
     } else {
       setError({

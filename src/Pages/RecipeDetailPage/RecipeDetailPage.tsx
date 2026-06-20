@@ -47,73 +47,74 @@ export default function RecipeDetailPage() {
     const dispatch = useDispatch()
     return (
         <div className="RecipeInformationCard" key={state.title} onClick={() => visible && dispatch(hideDialog())}>
-            <div className="ImageAndTitleContainer" >
-                <img src={state.image}></img>
-                <button className="Nutritioninfo" onClick={async () => {
-                    try {
-                        setLoadNutritionInfo(true);
-                        setShowSkeleton(true);
-                        const data = await generateNutritionInfo(state);
-                        setNutritionInfo(data);
-                    } catch (error) {
-                        console.error("AI Error:", error);
-                    }
-                    finally {
-                        setLoadNutritionInfo(false);
-                        setShowSkeleton(false);
-                    }
-                }}>
-                    <IoMdNutrition size="1.8rem" />
-                </button>
-                <button className="DeleteRecipe" onClick={() => {
-                    dispatch(showDialog())
-                }}>
-                    <RiDeleteBinLine size="1.8rem" />
-                </button>
-                <div className="TagListOverImage">
-                    {state.tag.map((tag: { name: string }) => {
-                        return <Badge content={tag.name} isTag={true} />
-                    })}
+            <div className="RecipePageContent">
+                <div className="ImageAndTitleContainer">
+                    <img src={state.image} alt={state.title} />
+                    <button className="Nutritioninfo" onClick={async () => {
+                        try {
+                            setLoadNutritionInfo(true);
+                            setShowSkeleton(true);
+                            const data = await generateNutritionInfo(state);
+                            setNutritionInfo(data);
+                        } catch (error) {
+                            console.error("AI Error:", error);
+                        }
+                        finally {
+                            setLoadNutritionInfo(false);
+                            setShowSkeleton(false);
+                        }
+                    }}>
+                        <IoMdNutrition size="1.8rem" />
+                    </button>
+                    <button className="DeleteRecipe" onClick={() => dispatch(showDialog())}>
+                        <RiDeleteBinLine size="1.8rem" />
+                    </button>
                 </div>
-                <h1>{state.title}</h1>
-            </div>
-            {visible && <div className="DialogContainer">
-                <Dialog message="Are you sure you want to delete" recipe={state} />
-            </div>}
-            <div className="OtherRecipeDetails">
-                <RecipeComponents header="Prep Time" value={state.time_minutes} icon={BsClockFill} />
-                <RecipeComponents header="Servings" value={state.servings} icon={FaUserGroup} />
-                <RecipeComponents header="Likes" value={state.likes} icon={HiHeart} />
-                {!loadNutritionInfo && <RecipeComponents header="Calories in All" value={nutritionInfo.overall_calories} icon={HiFire} />}
-            </div>
-            <div className='RecipeDescription' >
-                <span className='RecipeDescription'>{state.description}</span>
-            </div>
-            <div className="InstructionsAndIngredientSection">
-                <div className="IngredientSection">
-                    <div className="IngredientListHeader" >
-                        <PiChefHat size={"2rem"} color="#e8773d" />
-                        <span>Ingredients</span>
-                    </div>
-                    <div className="IngredientList" >
-                        {state.ingredient.map((ingredient: { name: string }) => {
-                            return <div>
-                                <FaSquareFull color="#393939" />
-                                <span>{ingredient.name}</span>
-                            </div>
-                        })}
+
+                <div className="RecipeHeaderSection">
+                    <h1 className="RecipeMainTitle">{state.title}</h1>
+                    <div className="TagListBelowImage">
+                        {state.tag.map((tag: { name: string }) => (
+                            <Badge content={tag.name} isTag={true} />
+                        ))}
                     </div>
                 </div>
-                <div className="StepsToPrepare" >
-                    <span className="InstructionsHeader">Instructions</span>
-                    {state.recipe_procedure.map((step: Step) => {
-                        return (
+
+                <div className="OtherRecipeDetails">
+                    <RecipeComponents header="Prep Time" value={state.time_minutes} icon={BsClockFill} />
+                    <RecipeComponents header="Servings" value={state.servings} icon={FaUserGroup} />
+                    <RecipeComponents header="Likes" value={state.likes} icon={HiHeart} />
+                    {!loadNutritionInfo && <RecipeComponents header="Calories" value={nutritionInfo.overall_calories} icon={HiFire} />}
+                </div>
+
+                <p className="RecipeDescription">{state.description}</p>
+
+                <hr className="RecipeDivider" />
+
+                <div className="InstructionsAndIngredientSection">
+                    <div className="IngredientSection">
+                        <div className="IngredientListHeader">
+                            <PiChefHat size={"1.4rem"} color="#e8773d" />
+                            <span>Ingredients</span>
+                        </div>
+                        <div className="IngredientList">
+                            {state.ingredient.map((ingredient: { name: string }) => (
+                                <div>
+                                    <FaSquareFull color="#e8773d" size="0.45rem" />
+                                    <span>{ingredient.name}</span>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+
+                    <div className="StepsToPrepare">
+                        <span className="InstructionsHeader">Instructions</span>
+                        {state.recipe_procedure.map((step: Step) => (
                             <Instruction step={step} key={step.step} />
-                        )
-                    })}
+                        ))}
+                    </div>
                 </div>
-            </div>
-            {(
+
                 <div className="NutritionContainer">
                     {showSkeleton && (
                         <div style={{
@@ -142,7 +143,11 @@ export default function RecipeDetailPage() {
                         />
                     )}
                 </div>
-            )}
+            </div>
+
+            {visible && <div className="DialogContainer">
+                <Dialog message="Are you sure you want to delete" recipe={state} />
+            </div>}
         </div>
     )
 }

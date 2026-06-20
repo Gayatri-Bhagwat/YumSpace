@@ -1,9 +1,23 @@
 .RecipeDetails {
     display: flex;
     flex-direction: row;
-    gap: 0.9rem;
-    padding: 0.5rem;
+    gap: 0.5rem;
+    padding: 0.4rem 0.5rem;
     width: 100%;
+    flex-wrap: nowrap;
+}
+
+.RecipeDetails .RecipeDetail {
+    flex-shrink: 1;
+    min-width: 0;
+    white-space: nowrap;
+}
+
+.RecipeDetails .RecipeDetail span {
+    font-size: 0.82rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .RecipeInfo {
@@ -12,40 +26,44 @@
 }
 
 .RecipeInfo img {
-    border-radius: 0.5rem;
-   height: 15rem;
-   /* width: 22rem; */
-   object-fit: cover;
+    display: block;
+    width: 100%;
+    aspect-ratio: 4/3;
+    border-radius: 0.75rem;
+    object-fit: cover;
+    object-position: center;
+    background-color: #fde8d8;
 }
 
 
 .RecipeCard {
-    display:flex;
+    display: flex;
     flex-direction: column;
-    border:1px solid #eee9e9;
+    border: 1px solid #eee9e9;
     border-radius: 1.2rem;
-    width: 20rem;
-    margin:1rem 0rem 0.5rem 0.5rem;
-    padding:1rem;
+    width: 100%;
+    padding: 1rem;
     cursor: pointer;
+    background: white;
+    transition: box-shadow 0.25s, transform 0.25s;
+    box-sizing: border-box;
 }
 
 .RecipeCard:hover {
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    transition: all 0.3s ease;
+    box-shadow: 0 8px 28px rgba(232, 119, 61, 0.12);
+    transform: translateY(-3px);
 }
 
 .RecipeTitle {
-    font-size: larger;
-    font-weight: 500;
+    font-size: 1rem;
+    font-weight: 600;
     padding-left: 0.4rem;
-    margin-top:0.5rem;
+    margin-top: 0.5rem;
+    line-height: 1.35;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
 } 
 
 
-@media (max-width:1000px)
-{
-    .RecipeCard {
-        width:22rem;
-    }
-}

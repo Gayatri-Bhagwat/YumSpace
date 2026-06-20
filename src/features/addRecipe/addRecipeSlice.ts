@@ -32,7 +32,15 @@ export const RecipeSlice = createSlice({
       const recipeIndex = state.recipe.findIndex(
         (r) => r.id === action.payload.id,
       );
-      state.recipe[recipeIndex] = action.payload;
+      if (recipeIndex !== -1) {
+        state.recipe[recipeIndex] = action.payload;
+      }
+      const filteredIndex = state.filteredRecipeData.findIndex(
+        (r) => r.id === action.payload.id,
+      );
+      if (filteredIndex !== -1) {
+        state.filteredRecipeData[filteredIndex] = action.payload;
+      }
     },
     deleteRecipe: (state, action: PayloadAction<string>) => {
       const recipeIndex = state.recipe.findIndex(

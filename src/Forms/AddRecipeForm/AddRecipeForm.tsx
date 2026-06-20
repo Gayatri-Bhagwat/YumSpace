@@ -142,12 +142,17 @@ export default function AddRecipeForm() {
         ...data,
         image: imageVal,
       });
-      dispatch(addRecipe({ ...response.data, image: updatedData.image })); // 👈 use preview URL until refetch
+      if (response.success) {
+        dispatch(addRecipe({ ...response.data, image: updatedData.image }));
+        dispatch(hideRecipeForm());
+      }
     } else {
       response = await editExistingRecipe(data, data.id);
-      dispatch(editRecipe({ ...response.data, image: updatedData.image }));
+      if (response.success) {
+        dispatch(editRecipe({ ...response.data, image: updatedData.image }));
+        dispatch(hideRecipeForm());
+      }
     }
-    dispatch(hideRecipeForm());
   };
 
   useEffect(() => {
@@ -162,65 +167,42 @@ export default function AddRecipeForm() {
     <>
       {visible && (
         <form className="AddFormCard">
-          <div
-            className="FormHeader"
-            style={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "space-between",
-            }}
-          >
-            <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-              <div
-                style={{
-                  width: "32px",
-                  height: "32px",
-                  borderRadius: "8px",
-                  background: "#fdf0e8",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                }}
-              >
+          <div className="FormHeader">
+            <div className="FormHeaderTitle">
+              <div className="FormHeaderIcon">
                 <PiNotePencilFill size="1.1rem" color="#e8773d" />
               </div>
               <div>
-                <p style={{ margin: 0, fontSize: "medium", fontWeight: 600 }}>
+                <p className="FormHeaderName">
                   {mode !== "add" ? "Edit" : "Add"} Recipe
                 </p>
-                <p style={{ margin: 0, fontSize: "small", color: "#888" }}>
-                  Fill in the details below
-                </p>
+                <p className="FormHeaderSub">Fill in the details below</p>
               </div>
             </div>
             <RxCrossCircled
               onClick={() => dispatch(hideRecipeForm())}
               size="1.5rem"
               color="#e8773d"
+              style={{ cursor: "pointer", flexShrink: 0 }}
             />
           </div>
-          <hr></hr>
-          <div className="BasicRecipeInfo">
-            <span style={{ fontWeight: 600, color: "#2d1f14" }}>
-              BASIC INFO
-            </span>
+          <div className="BasicRecipeInfo SectionCard">
+            <span className="SectionLabel">BASIC INFO</span>
             <FormInputBasicDetails
               register={register}
               error={errors}
               formData={basicDetailFields}
             />
           </div>
-          <div className="TimeAndServingDetails">
-            <span style={{ fontWeight: 600, color: "#2d1f14" }}>
-              TIME & SERVINGS
-            </span>
+          <div className="TimeAndServingDetails SectionCard">
+            <span className="SectionLabel">TIME & SERVINGS</span>
             <FormInputTimeAndServings
               register={register}
               formData={timeServingsDetails}
               error={errors}
             />
           </div>
-          <div className="TagsInput">
+          <div className="TagsInput SectionCard">
             <TagIngredientInputForm
               header="TAGS"
               register={register}
@@ -229,7 +211,7 @@ export default function AddRecipeForm() {
               error={errors}
             />
           </div>
-          <div className="IngredientInput">
+          <div className="IngredientInput SectionCard">
             <TagIngredientInputForm
               header="INGREDIENTS"
               register={register}
@@ -238,8 +220,8 @@ export default function AddRecipeForm() {
               error={errors}
             />
           </div>
-          <div className="StepInput">
-            <span style={{ fontWeight: 600, color: "#2d1f14" }}>STEPS</span>
+          <div className="StepInput SectionCard">
+            <span className="SectionLabel">STEPS</span>
             <StepsToPrepareForm
               register={register}
               control={control}
