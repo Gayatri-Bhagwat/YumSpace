@@ -120,7 +120,8 @@ export default function RecipeCard({ item }: { item: MyFormValues }) {
 
           <div
             style={{
-              paddingTop: "7rem",
+              // paddingTop: "5rem",
+              padding:"5rem 1rem"
             }}
           >
             Click here to view recipe details

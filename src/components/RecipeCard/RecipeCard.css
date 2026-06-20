@@ -47,6 +47,8 @@
     background: white;
     transition: box-shadow 0.25s, transform 0.25s;
     box-sizing: border-box;
+    overflow: hidden;
+    position: relative;
 }
 
 .RecipeCard:hover {
