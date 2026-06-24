@@ -11,9 +11,15 @@ export interface MyFormValues {
   likes:number;
   time_minutes:number;
   recipe_procedure:{step: number, title:string, text:string, timer:number}[];
-  created_at:string
+  created_at:string;
+  user:User
 }
 
+export interface User {
+  name:string;
+  headline:string;
+  email:string;
+}
 export interface FieldConfig {
   inputTitle: Path<MyFormValues>,
   InputElement: React.ElementType,

@@ -113,6 +113,8 @@ export default function AddRecipeForm() {
     handleSubmit,
     reset,
     unregister,
+    getValues,
+    setValue,
     formState: { errors },
   } = useForm<MyFormValues>({
     mode: "all",
@@ -163,6 +165,7 @@ export default function AddRecipeForm() {
       reset(defaultRecipeData);
     }
   }, [selectedRecipe, mode, defaultRecipeData, reset, unregister]);
+
   return (
     <>
       {visible && (
@@ -192,6 +195,8 @@ export default function AddRecipeForm() {
               register={register}
               error={errors}
               formData={basicDetailFields}
+              getTitle={() => getValues("title")}
+              setDescription={(val) => setValue("description", val)}
             />
           </div>
           <div className="TimeAndServingDetails SectionCard">
@@ -209,6 +214,7 @@ export default function AddRecipeForm() {
               control={control}
               name={"tag"}
               error={errors}
+              getTitle={() => getValues("title")}
             />
           </div>
           <div className="IngredientInput SectionCard">
@@ -218,6 +224,8 @@ export default function AddRecipeForm() {
               control={control}
               name={"ingredient"}
               error={errors}
+              getTitle={() => getValues("title")}
+              getServings={() => getValues("servings")}
             />
           </div>
           <div className="StepInput SectionCard">

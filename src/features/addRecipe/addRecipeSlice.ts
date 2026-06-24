@@ -4,12 +4,20 @@ import type { MyFormValues } from "../../Enums/FormFields";
 
 interface RecipeState {
   recipe: MyFormValues[];
-  filteredRecipeData: MyFormValues[]
+  userRecipe: MyFormValues[];
+  filteredRecipeData: MyFormValues[];
+  filteredUserRecipeData: MyFormValues[];
+  isSearchActive: boolean;
+  isUserSearchActive: boolean;
 }
 
 const initialState: RecipeState = {
   recipe: RecipeCardData,
-  filteredRecipeData: []
+  userRecipe: [],
+  filteredRecipeData: [],
+  filteredUserRecipeData: [],
+  isSearchActive: false,
+  isUserSearchActive: false,
 };
 
 export const RecipeSlice = createSlice({
@@ -17,43 +25,61 @@ export const RecipeSlice = createSlice({
   initialState,
   reducers: {
     setRecipe: (state, action: PayloadAction<MyFormValues[]>) => {
-      if (state.filteredRecipeData.length !== 0)
-      {
-        state.recipe = state.filteredRecipeData
-      }
-      else{
-        state.recipe = action.payload
-      }
+      state.recipe = action.payload;
+    },
+    setUserRecipe: (state, action: PayloadAction<MyFormValues[]>) => {
+      state.userRecipe = action.payload;
     },
     addRecipe: (state, action: PayloadAction<MyFormValues>) => {
       state.recipe.push(action.payload);
+      state.userRecipe.push(action.payload);
     },
     editRecipe: (state, action: PayloadAction<MyFormValues>) => {
-      const recipeIndex = state.recipe.findIndex(
-        (r) => r.id === action.payload.id,
-      );
-      if (recipeIndex !== -1) {
-        state.recipe[recipeIndex] = action.payload;
-      }
-      const filteredIndex = state.filteredRecipeData.findIndex(
-        (r) => r.id === action.payload.id,
-      );
-      if (filteredIndex !== -1) {
-        state.filteredRecipeData[filteredIndex] = action.payload;
-      }
+      const update = (list: MyFormValues[]) => {
+        const i = list.findIndex((r) => r.id === action.payload.id);
+        if (i !== -1) list[i] = action.payload;
+      };
+      update(state.recipe);
+      update(state.userRecipe);
+      update(state.filteredRecipeData);
+      update(state.filteredUserRecipeData);
     },
     deleteRecipe: (state, action: PayloadAction<string>) => {
-      const recipeIndex = state.recipe.findIndex(
-        (r) => r.title === action.payload,
-      );
-      state.recipe.splice(recipeIndex, 1);
+      const remove = (list: MyFormValues[]) => {
+        const i = list.findIndex((r) => r.title === action.payload);
+        if (i !== -1) list.splice(i, 1);
+      };
+      remove(state.recipe);
+      remove(state.userRecipe);
+      remove(state.filteredRecipeData);
+      remove(state.filteredUserRecipeData);
     },
-    searchRecipe: (state, action:PayloadAction<MyFormValues[]>) => {
-      state.filteredRecipeData = action.payload
-    }
+    searchRecipe: (state, action: PayloadAction<MyFormValues[]>) => {
+      state.filteredRecipeData = action.payload;
+      state.isSearchActive = true;
+      // clear the other scope so the IIFE never returns stale Mine results
+      state.isUserSearchActive = false;
+      state.filteredUserRecipeData = [];
+    },
+    searchUserRecipe: (state, action: PayloadAction<MyFormValues[]>) => {
+      state.filteredUserRecipeData = action.payload;
+      state.isUserSearchActive = true;
+      // clear the other scope so the IIFE never returns stale Everyone results
+      state.isSearchActive = false;
+      state.filteredRecipeData = [];
+    },
+    clearSearch: (state) => {
+      state.filteredRecipeData = [];
+      state.filteredUserRecipeData = [];
+      state.isSearchActive = false;
+      state.isUserSearchActive = false;
+    },
   },
 });
 
-export const { setRecipe, addRecipe, editRecipe, deleteRecipe, searchRecipe } =
-  RecipeSlice.actions;
+export const {
+  setRecipe, setUserRecipe,
+  addRecipe, editRecipe, deleteRecipe,
+  searchRecipe, searchUserRecipe, clearSearch,
+} = RecipeSlice.actions;
 export default RecipeSlice.reducer;

@@ -66,6 +66,22 @@
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
     overflow: hidden;
-} 
+}
+
+.MyRecipeBadge {
+    position: absolute;
+    top: 1.6rem;
+    left: 0;
+    background-color: #e8773d;
+    color: white;
+    font-size: 0.62rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    padding: 3px 10px 3px 8px;
+    border-radius: 0 999px 999px 0;
+    pointer-events: none;
+    z-index: 1;
+}
 
 

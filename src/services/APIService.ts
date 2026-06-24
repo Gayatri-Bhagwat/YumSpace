@@ -28,47 +28,47 @@ export const API = {
       method: "POST",
       body: new URLSearchParams(body),
     }),
-  getWithParams: (path: string, params: Record<string, string>) =>
-    fetch(`${base_url}${path}?${new URLSearchParams(params)}`, {
+  getWithParams: (path: string, params: Record<string, string | boolean>) =>
+    fetch(`${base_url}${path}?${new URLSearchParams(
+      Object.fromEntries(Object.entries(params).map(([k, v]) => [k, String(v)]))
+    )}`, {
       headers: getHeaders(),
       method: "GET",
-    }),
-  refreshToken:(path: string, body: {refresh_token: string}) =>
-    fetch(`${base_url}${path}`, {
-      headers: getHeaders(),
-      method: "POST",
-      body: new URLSearchParams(body)
     }),
 };
 
 // ─── Token Helpers ─────────────────────────────────────────
+
 function isAccessTokenExpired(): boolean {
     const expiry = localStorage.getItem("access_token_expiry");
-    console.log(!expiry || Date.now() > Number(expiry), "Expired or not");
     return !expiry || Date.now() > Number(expiry);
+}
+
+function clearAuthStorage() {
+    localStorage.removeItem("token");
+    localStorage.removeItem("refresh_token");
+    localStorage.removeItem("access_token_expiry");
 }
 
 export const refreshApiToken = async (data: string) => {
     try {
-        // Intentionally no Authorization header — the expired access token
-        // would cause some backends to reject the refresh request.
+        // No Authorization header — an expired access token causes some
+        // backends to reject the refresh request outright.
         const response = await fetch(`${base_url}api/user/refresh/`, {
             method: "POST",
             headers: {
-                "Content-Type": "application/x-www-form-urlencoded",
+                "Content-Type": "application/json",
                 "X-CSRFToken": getCookie("csrftoken"),
             },
-            body: new URLSearchParams({ refresh_token: data }),
+            body: JSON.stringify({ refresh_token: data }),
         });
 
         if (!response.ok) {
-            console.log("Fetch refresh token failed.");
             const errorData = await response.json();
             return { success: false, errorDetails: errorData, status: response.status };
         }
 
         const validData = await response.json();
-        console.log(validData.access_token, "Access token (newly)");
 
         localStorage.setItem("token", validData.access_token);
         localStorage.setItem("refresh_token", validData.refresh_token);
@@ -76,42 +76,55 @@ export const refreshApiToken = async (data: string) => {
 
         return { success: true, data: validData, status: response.status };
     } catch (networkError: unknown) {
-        console.log("Fetch refresh token failed.");
         return { success: false, errorDetails: { detail: networkError }, status: 0 };
     }
 };
+
+// Shared in-flight refresh promise — if multiple requests fire while the
+// token is expired, they all wait on the same refresh instead of each
+// sending their own, which would burn the refresh token.
+let refreshPromise: Promise<boolean> | null = null;
+
 const handleExpiredToken = async (): Promise<boolean> => {
-    console.log("Expired token");
-    
     const refreshToken = localStorage.getItem("refresh_token");
-    console.log("Refresh token from storage:", refreshToken); // ✅ check if null
-
     if (!refreshToken) {
-        console.log("No refresh token found — clearing storage");
-        localStorage.removeItem("token");
-        localStorage.removeItem("refresh_token");
-        localStorage.removeItem("access_token_expiry");
+        clearAuthStorage();
         return false;
     }
-
     const result = await refreshApiToken(refreshToken);
-    console.log("Refresh result:", result);
-
     if (!result.success) {
-        localStorage.removeItem("token");
-        localStorage.removeItem("refresh_token");
-        localStorage.removeItem("access_token_expiry");
+        clearAuthStorage();
         return false;
     }
-
     return true;
 };
 
 const ensureValidToken = async (): Promise<boolean> => {
-    if (isAccessTokenExpired()) {
-        return await handleExpiredToken();
+    if (!isAccessTokenExpired()) return true;
+
+    if (!refreshPromise) {
+        refreshPromise = handleExpiredToken().finally(() => {
+            refreshPromise = null;
+        });
     }
-    return true;
+    return await refreshPromise;
+};
+
+// Runs an authenticated fetch; on a 401 (token expired but client didn't
+// know — e.g. clock skew) it refreshes once and retries automatically.
+const fetchWithAuth = async (fn: () => Promise<Response>): Promise<Response> => {
+    const response = await fn();
+    if (response.status !== 401) return response;
+
+    if (!refreshPromise) {
+        refreshPromise = handleExpiredToken().finally(() => {
+            refreshPromise = null;
+        });
+    }
+    const refreshed = await refreshPromise;
+    if (!refreshed) return response;
+
+    return await fn();
 };
 
 // ─── API Methods ───────────────────────────────────────────
@@ -144,26 +157,24 @@ export const getApiToken = async (data: Credentials) => {
     }
 };
 
-export const getAllRecipes = async (search: Record<string, string>, getAllData: boolean) => {
+export const getAllRecipes = async (search: Record<string, string | boolean>, getAllData: boolean) => {
     try {
         if (!await ensureValidToken()) {
             return { success: false, errorDetails: { detail: "Session expired." }, status: 401 };
         }
 
-        const response = getAllData
-            ? await API.get("api/recipe/recipes/")
-            : await API.getWithParams("api/recipe/recipes/", search);
-        console.log(base_url,"base url")
-        console.log(localStorage.getItem("token"))
+        const response = await fetchWithAuth(() =>
+            getAllData
+                ? API.get("api/recipe/recipes/")
+                : API.getWithParams("api/recipe/recipes/", search)
+        );
 
-        console.log(response);
         if (!response.ok) {
             const errorData = await response.json();
             return { success: false, errorDetails: errorData, status: response.status };
         }
 
         const validData = await response.json();
-        console.log(validData);
         return { success: true, data: validData, status: response.status };
     } catch (networkError: unknown) {
         return { success: false, errorDetails: { detail: networkError }, status: 0 };
@@ -176,12 +187,15 @@ export const editExistingRecipe = async (data: MyFormValues, id: number) => {
             return { success: false, errorDetails: { detail: "Session expired." }, status: 401 };
         }
 
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         const { image, ...recipeData } = data;
-        const response = await fetch(`${base_url}api/recipe/recipes/${id}/`, {
-            method: "PATCH",
-            headers: getHeadersForMultipart(),
-            body: JSON.stringify(recipeData),
-        });
+        const response = await fetchWithAuth(() =>
+            fetch(`${base_url}api/recipe/recipes/${id}/`, {
+                method: "PATCH",
+                headers: getHeadersForMultipart(),
+                body: JSON.stringify(recipeData),
+            })
+        );
 
         if (!response.ok) {
             const errorData = await response.json();
@@ -201,21 +215,22 @@ export const deleteExistingRecipe = async (id: number) => {
             return { success: false, errorDetails: { detail: "Session expired." }, status: 401 };
         }
 
-        const response = await fetch(`${base_url}api/recipe/recipes/${id}/`, {
-            method: "DELETE",
-            headers: {
-                "X-CSRFToken": getCookie("csrftoken"),
-                Authorization: `Token ${localStorage.getItem("token")}`,
-            },
-        });
+        const response = await fetchWithAuth(() =>
+            fetch(`${base_url}api/recipe/recipes/${id}/`, {
+                method: "DELETE",
+                headers: {
+                    "X-CSRFToken": getCookie("csrftoken"),
+                    Authorization: `Token ${localStorage.getItem("token")}`,
+                },
+            })
+        );
 
-        console.log("Response delete", response);
         if (!response.ok) {
             const errorData = await response.json();
             return { success: false, errorDetails: errorData, status: response.status };
         }
 
-        return await response;
+        return response;
     } catch (networkError: unknown) {
         return { success: false, errorDetails: { detail: networkError }, status: 0 };
     }
@@ -227,18 +242,21 @@ export const addNewRecipe = async (data: MyFormValues) => {
             return { success: false, errorDetails: { detail: "Session expired." }, status: 401 };
         }
 
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         const { image, ...recipeData } = data;
 
         // Step 1 — create recipe as JSON (no image)
-        const response = await fetch(`${base_url}api/recipe/recipes/`, {
-            method: "POST",
-            headers: {
-                "X-CSRFToken": getCookie("csrftoken"),
-                "Content-Type": "application/json",
-                Authorization: `Token ${localStorage.getItem("token")}`,
-            },
-            body: JSON.stringify(recipeData),
-        });
+        const response = await fetchWithAuth(() =>
+            fetch(`${base_url}api/recipe/recipes/`, {
+                method: "POST",
+                headers: {
+                    "X-CSRFToken": getCookie("csrftoken"),
+                    "Content-Type": "application/json",
+                    Authorization: `Token ${localStorage.getItem("token")}`,
+                },
+                body: JSON.stringify(recipeData),
+            })
+        );
 
         if (!response.ok) {
             const errorData = await response.json();
@@ -257,15 +275,14 @@ export const addNewRecipe = async (data: MyFormValues) => {
             formData.append("image", data.image);
         }
 
-        const imgResponse = await fetch(
-            `${base_url}api/recipe/recipes/${createdRecipe.id}/upload-image/`,
-            {
+        const imgResponse = await fetchWithAuth(() =>
+            fetch(`${base_url}api/recipe/recipes/${createdRecipe.id}/upload-image/`, {
                 method: "POST",
                 headers: {
                     Authorization: `Token ${localStorage.getItem("token")}`,
                 },
                 body: formData,
-            }
+            })
         );
 
         if (!imgResponse.ok) {

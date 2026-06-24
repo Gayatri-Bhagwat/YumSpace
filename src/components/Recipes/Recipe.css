@@ -104,6 +104,55 @@
     background:linear-gradient(#fef6ed , #fff0e1 ,#ffe8d4);
 }
 
+.RecipeCountHeader {
+    display: flex;
+    flex-direction: row;
+    gap: 0;
+    border-bottom: 2px solid #eee9e9;
+}
+
+.RecipeCountHeader div {
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
+    padding: 0.5rem 1.1rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: #9b8880;
+    cursor: pointer;
+    border-bottom: 2.5px solid transparent;
+    margin-bottom: -2px;
+    transition: color 0.15s, border-color 0.15s;
+}
+
+.RecipeCountHeader div:hover {
+    color: #e8773d;
+}
+
+.RecipeCountHeader div.active {
+    color: #e8773d;
+    border-bottom-color: #e8773d;
+    font-weight: 600;
+}
+
+.RecipeCountHeader div span {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #fff0e1;
+    color: #e8773d;
+    font-size: 0.68rem;
+    font-weight: 700;
+    padding: 2px 7px;
+    border-radius: 999px;
+    width: 45px;
+}
+
+.RecipeCountHeader div.active span {
+    background-color: #e8773d;
+    color: white;
+}
+
 /* Mobile icon buttons — hidden by default */
 .IconContainer {
     display: none;

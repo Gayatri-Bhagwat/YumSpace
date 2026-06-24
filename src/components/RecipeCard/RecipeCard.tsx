@@ -8,9 +8,10 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import type { MyFormValues } from "../../Enums/FormFields";
 import { MdModeEdit } from "react-icons/md";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { showRecipeForm } from "../../features/showRecipeForm/showRecipeSlice";
 import { SlCalender } from "react-icons/sl";
+import type { RootState } from "../../stores/store";
 // import { generateNutritionInfo } from "../../services/gemini";
 
 export interface RecipeTypes {
@@ -31,9 +32,16 @@ export interface RecipeTypes {
   created_at: string;
 }
 
-export default function RecipeCard({ item }: { item: MyFormValues }) {
+export default function RecipeCard({
+  item,
+  showBadge,
+}: {
+  item: MyFormValues;
+  showBadge: boolean;
+}) {
   const [hover, setHover] = useState(false);
-
+  const { userRecipe } = useSelector((state: RootState) => state.addRecipe);
+  const isMyRecipe = (userRecipe ?? []).some((r) => r.id === item.id);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const formatDate = (created_at: string) => {
@@ -43,6 +51,7 @@ export default function RecipeCard({ item }: { item: MyFormValues }) {
       year: "numeric",
     });
   };
+
   return (
     <div
       className="RecipeCard"
@@ -52,6 +61,9 @@ export default function RecipeCard({ item }: { item: MyFormValues }) {
         navigate(`/recipe/${item.title}`, { state: item });
       }}
     >
+      {isMyRecipe && !showBadge && (
+        <div className="MyRecipeBadge">✦ My Recipe</div>
+      )}
       <div className="RecipeInfo">
         <img
           src={item.image?.toString()}
@@ -76,12 +88,12 @@ export default function RecipeCard({ item }: { item: MyFormValues }) {
           {item.tag.map((tag, index) => (
             <Badge content={tag.name} key={index} isTag={false} />
           ))}
-        <hr style={{color:"lightgray"}}></hr>
-        <RecipeDetails
-          icon={SlCalender}
-          content={formatDate(item.created_at)}
-          color={"black"}
-        />
+          <hr style={{ color: "lightgray" }}></hr>
+          <RecipeDetails
+            icon={SlCalender}
+            content={formatDate(item.created_at)}
+            color={"black"}
+          />
         </div>
       </div>
       {hover && (
@@ -99,29 +111,31 @@ export default function RecipeCard({ item }: { item: MyFormValues }) {
               "linear-gradient(to bottom, rgba(0,0,0,0.6), rgba(0,0,0,0.5))", // ✅ gradient background
           }}
         >
-          <MdModeEdit
-            onClick={(e) => {
-              e.stopPropagation();
-              dispatch(
-                showRecipeForm({
-                  visible: true,
-                  selectedRecipe: item,
-                  mode: "edit",
-                }),
-              );
-            }}
-            size="1.6rem"
-            style={{
-              position: "absolute",
-              top: "20px",
-              right: "30px",
-            }}
-          />
+          {isMyRecipe && (
+            <MdModeEdit
+              onClick={(e) => {
+                e.stopPropagation();
+                dispatch(
+                  showRecipeForm({
+                    visible: true,
+                    selectedRecipe: item,
+                    mode: "edit",
+                  }),
+                );
+              }}
+              size="1.6rem"
+              style={{
+                position: "absolute",
+                top: "20px",
+                right: "30px",
+              }}
+            />
+          )}
 
           <div
             style={{
               // paddingTop: "5rem",
-              padding:"5rem 1rem"
+              padding: "6rem 1rem",
             }}
           >
             Click here to view recipe details

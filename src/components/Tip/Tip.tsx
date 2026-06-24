@@ -1,4 +1,3 @@
-import { IoIosBook } from "react-icons/io";
 import "./Tip.css"
 import React from "react";
 import { generateContent } from "../../services/gemini";
@@ -21,7 +20,7 @@ export default function Tip() {
         <div className="TipClass">
             <div className="TipHeader">
                 <span>
-                    <IoIosBook color="#e8773d" size={"3rem"} /> Tip of the Day
+                    <span style={{fontSize:"1.5rem"}}>💡</span> Tip of the Day
                 </span>
             </div>
             <p>

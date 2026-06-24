@@ -64,7 +64,7 @@
     border-radius: 2rem;
     cursor: default;
     width: fit-content;
-    padding: 0.35rem 0.9rem;
+    padding: 0.5rem;
     background-color: #fef6ed;
     border: 1px solid rgba(232, 119, 61, 0.25);
     color: #e8773d;
@@ -77,4 +77,14 @@
     display: flex;
     align-items: center;
     gap: 0.4rem;
+}
+
+.RecipeCount {
+    display: flex;
+    flex-direction: row;
+    gap:1rem
+}
+
+.MineRecipeCount{
+    color: #2d1f14;
 }

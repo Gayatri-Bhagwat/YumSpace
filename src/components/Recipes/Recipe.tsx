@@ -1,4 +1,3 @@
-import { LuCookingPot } from "react-icons/lu";
 import "./Recipe.css";
 import RecipeCard from "../RecipeCard/RecipeCard";
 import RecipeDetails from "../RecipeDetails/RecipeDetails";
@@ -18,29 +17,51 @@ import {
 } from "../../features/showGenerateIngredients/showGenerateIngredientSlice";
 import GenerateIngredientList from "../GenerateIngredientList/GenerateIngredientList";
 import { getAllRecipes } from "../../services/APIService";
-import { useEffect } from "react";
-import { setRecipe } from "../../features/addRecipe/addRecipeSlice";
+import { useEffect, useState } from "react";
+import {
+  setRecipe,
+  setUserRecipe,
+} from "../../features/addRecipe/addRecipeSlice";
+import type { ActionCreatorWithPayload } from "@reduxjs/toolkit";
+import type { MyFormValues } from "../../Enums/FormFields";
 
 export default function Recipe() {
   const dispatch = useDispatch();
-  const { recipe, filteredRecipeData } = useSelector(
+  const [activeTab, setActiveTab] = useState<"all" | "mine">("all");
+  const { recipe, userRecipe, filteredRecipeData, filteredUserRecipeData, isSearchActive, isUserSearchActive } = useSelector(
     (state: RootState) => state.addRecipe,
   );
-  const recipeToDisplay =
-    filteredRecipeData.length === 0 ? recipe : filteredRecipeData;
-  useEffect(() => {
-    const fetchAllRecipes = async () => {
-      const response = await getAllRecipes({search:""}, true);
+  const showBadge = activeTab == "mine" ? true : false
 
+  // Search scope overrides the active tab while a search is running.
+  // When no search is active, fall back to whichever tab is selected.
+  const recipeToDisplay = (() => {
+    if (isSearchActive) return filteredRecipeData ?? [];
+    if (isUserSearchActive) return filteredUserRecipeData ?? [];
+    return (activeTab === "mine" ? userRecipe : recipe) ?? [];
+  })();
+
+  useEffect(() => {
+    const setRecipeData = (
+      response: Awaited<ReturnType<typeof getAllRecipes>>,
+      setterFunction: ActionCreatorWithPayload<MyFormValues[]>,
+    ) => {
       if (response.success && response.data) {
-        // ASSIGNMENT HAPPENS HERE:
-        // response.data is the MyFormValues[] array sent to your reducer
-        dispatch(setRecipe(response.data));
+        dispatch(setterFunction(response.data));
       }
+    };
+    const fetchAllRecipes = async () => {
+      const [allRecipes, userRecipes] = await Promise.all([
+        getAllRecipes({ search: "", active_user: false }, false),
+        getAllRecipes({ search: "", active_user: true }, false),
+      ]);
+      setRecipeData(allRecipes, setRecipe);
+      setRecipeData(userRecipes, setUserRecipe);
     };
 
     fetchAllRecipes();
   }, [dispatch]);
+  
   const visible = useSelector((state: RootState) => state.showRecipe.visible);
   const { ingredientVisible } = useSelector(
     (state: RootState) => state.showGenerateIngredient,
@@ -48,12 +69,20 @@ export default function Recipe() {
   return (
     <div className="RecipeSection">
       <div className="RecipeHeader">
-        <RecipeDetails
-          icon={LuCookingPot}
-          size={"2rem"}
-          color="e8773d"
-          content={`${recipeToDisplay.length} Results Found for Searched Recipe`}
-        />
+        <div className="RecipeCountHeader">
+          <div
+            className={activeTab === "all" ? "active" : ""}
+            onClick={() => setActiveTab("all")}
+          >
+            All Recipes <span>{recipe.length}</span>
+          </div>
+          <div
+            className={activeTab === "mine" ? "active" : ""}
+            onClick={() => setActiveTab("mine")}
+          >
+            My Recipes <span>{userRecipe.length}</span>
+          </div>
+        </div>
         <div className="ButtonContainer">
           <button
             className="GenerateShoppingListButton"
@@ -113,9 +142,14 @@ export default function Recipe() {
         </div>
       </div>
       <div className="RecipeGrid">
-        {recipeToDisplay.map((recipe) => (
-          <RecipeCard key={recipe.title} item={recipe} />
-        ))}
+        {recipeToDisplay.length > 0
+          ? recipeToDisplay.map((recipe) => (
+              <RecipeCard key={recipe.title} item={recipe} showBadge={showBadge}/>
+            ))
+          : (isSearchActive || isUserSearchActive) && (
+              <div className="NoRecipeFound">No recipes found for your search.</div>
+            )
+        }
       </div>
       {visible && (
         <div className="overlay" onClick={() => dispatch(hideRecipeForm())}>

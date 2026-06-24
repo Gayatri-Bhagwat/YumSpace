@@ -37,3 +37,43 @@
         cursor: pointer;
     }
 }
+
+.SearchContainer {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.SearchForContainer {
+    display: flex;
+    flex-direction: row;
+    border: 1px solid #eee9e9;
+    border-radius: 0.6rem;
+    overflow: hidden;
+    background: white;
+    flex-shrink: 0;
+}
+
+.SearchForContainer button {
+    padding: 0.5rem 0.9rem;
+    font-size: 0.78rem;
+    font-weight: 500;
+    font-family: 'Poppins', sans-serif;
+    cursor: pointer;
+    border: none;
+    background: transparent;
+    color: #9b8880;
+    transition: background 0.15s, color 0.15s;
+    white-space: nowrap;
+}
+
+.SearchForContainer button:hover:not(.active) {
+    color: #e8773d;
+}
+
+.SearchForContainer button.active {
+    background-color: #e8773d;
+    color: white;
+    font-weight: 600;
+}

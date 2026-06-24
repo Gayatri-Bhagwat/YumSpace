@@ -5,8 +5,16 @@ import { useSelector } from "react-redux"
 import type { RootState } from "../../stores/store"
 
 export default function Header() {
-    const { recipe , filteredRecipeData} = useSelector((state: RootState) => state.addRecipe)
-    const recipeToDisplay = filteredRecipeData.length === 0 ? recipe : filteredRecipeData
+    const { recipe, filteredRecipeData, filteredUserRecipeData, isSearchActive, isUserSearchActive } = useSelector(
+    (state: RootState) => state.addRecipe,
+  );
+
+  const recipeToDisplay = (() => {
+    if (isSearchActive) return filteredRecipeData ?? [];
+    if (isUserSearchActive) return filteredUserRecipeData ?? [];
+    return recipe ?? [];
+  })();
+    
     return (
         <div className="topHeader">
             <div className="HeaderCard">
