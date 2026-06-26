@@ -1,9 +1,9 @@
 import { CgLock } from "react-icons/cg";
 import { FaUserGroup } from "react-icons/fa6";
 import { HiHeart } from "react-icons/hi";
+import { CiHeart } from "react-icons/ci";
 import "./RecipeCard.css";
 import RecipeDetails from "../RecipeDetails/RecipeDetails";
-import Badge from "../Badge/Badge";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import type { MyFormValues } from "../../Enums/FormFields";
@@ -12,7 +12,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { showRecipeForm } from "../../features/showRecipeForm/showRecipeSlice";
 import { SlCalender } from "react-icons/sl";
 import type { RootState } from "../../stores/store";
-// import { generateNutritionInfo } from "../../services/gemini";
 
 export interface RecipeTypes {
   title: string;
@@ -40,10 +39,12 @@ export default function RecipeCard({
   showBadge: boolean;
 }) {
   const [hover, setHover] = useState(false);
+  const [liked, setLiked] = useState(false);
   const { userRecipe } = useSelector((state: RootState) => state.addRecipe);
   const isMyRecipe = (userRecipe ?? []).some((r) => r.id === item.id);
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
   const formatDate = (created_at: string) => {
     return new Date(created_at).toLocaleDateString("en-GB", {
       day: "numeric",
@@ -51,6 +52,8 @@ export default function RecipeCard({
       year: "numeric",
     });
   };
+
+  const likeCount = (item.likes ?? 0) + (liked ? 1 : 0);
 
   return (
     <div
@@ -65,11 +68,15 @@ export default function RecipeCard({
         <div className="MyRecipeBadge">✦ My Recipe</div>
       )}
       <div className="RecipeInfo">
-        <img
-          src={item.image?.toString()}
-          alt={item.title}
-          className={`RecipeImage`}
-        />
+        {item.image ? (
+          <img
+            src={item.image.toString()}
+            alt={item.title}
+            className="RecipeImage"
+          />
+        ) : (
+          <div className="RecipeImagePlaceholder">🍽️</div>
+        )}
         <span className="RecipeTitle">{item.title}</span>
         <div className="RecipeDetails">
           <RecipeDetails
@@ -82,18 +89,35 @@ export default function RecipeCard({
             content={`${item.servings} servings`}
             color="black"
           />
-          <RecipeDetails icon={HiHeart} content={item.likes} color="black" />
+          {likeCount > 0 && (
+            <RecipeDetails
+              icon={HiHeart}
+              content={likeCount}
+              color={liked ? "#e8521a" : "black"}
+            />
+          )}
         </div>
         <div className="Ingredients">
-          {item.tag.map((tag, index) => (
-            <Badge content={tag.name} key={index} isTag={false} />
-          ))}
-          <hr style={{ color: "lightgray" }}></hr>
-          <RecipeDetails
-            icon={SlCalender}
-            content={formatDate(item.created_at)}
-            color={"black"}
-          />
+          <div className="CardFooter">
+            <RecipeDetails
+              icon={SlCalender}
+              content={formatDate(item.created_at)}
+              color="black"
+            />
+            <button
+              className={`LikeButton${liked ? " liked" : ""}`}
+              onClick={(e) => {
+                e.stopPropagation();
+                setLiked((prev) => !prev);
+              }}
+            >
+              {liked ? (
+                <HiHeart size="1.25rem" color="#e8521a" />
+              ) : (
+                <CiHeart size="1.25rem" />
+              )}
+            </button>
+          </div>
         </div>
       </div>
       {hover && (
@@ -108,7 +132,7 @@ export default function RecipeCard({
             right: 0,
             bottom: 0,
             background:
-              "linear-gradient(to bottom, rgba(0,0,0,0.6), rgba(0,0,0,0.5))", // ✅ gradient background
+              "linear-gradient(to bottom, rgba(0,0,0,0.6), rgba(0,0,0,0.5))",
           }}
         >
           {isMyRecipe && (
@@ -131,13 +155,7 @@ export default function RecipeCard({
               }}
             />
           )}
-
-          <div
-            style={{
-              // paddingTop: "5rem",
-              padding: "6rem 1rem",
-            }}
-          >
+          <div style={{ padding: "6rem 1rem" }}>
             Click here to view recipe details
           </div>
         </div>

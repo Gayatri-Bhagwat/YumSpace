@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import { getApiToken } from "../../services/APIService";
 import type { Credentials, NotFound } from "../../Enums/Auth";
+import { useDispatch } from "react-redux";
+import { setUser } from "../../features/user/userSlice";
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -9,6 +11,7 @@ export default function Login() {
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<Credentials | NotFound | null>(null);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   useEffect(() => {
     if (localStorage.getItem("token")) {
@@ -29,7 +32,8 @@ export default function Login() {
     const response = await getApiToken({ email: email, password: password });
     if (response.success) {
       setLoading(false);
-      navigate("/home", {state:{'headline':response.data.headline, 'user_name':response.data.user_name}});
+      dispatch(setUser({ user_name: response.data.user_name ?? "", headline: response.data.headline ?? "" }));
+      navigate("/home");
     } else if (!isBlankFieldError(response.errorDetails)) {
       setError({ details: response.errorDetails.error });
       setLoading(false);

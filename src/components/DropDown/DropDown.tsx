@@ -4,14 +4,16 @@ export default function DropDown({
   selectOptions,
   value,
   onChange,
+  className,
 }: {
-  selectOptions: string[];
-  value: string;
-  onChange: (value: string) => void;
+  selectOptions: string[] | number[];
+  value: string | number;
+  onChange: (value: string | number) => void 
+  className:string
 }) {
   return (
     <select
-      className="FilterOptions"
+      className={className}
       value={value}
       onChange={(e) => {
         onChange(e.target.value);

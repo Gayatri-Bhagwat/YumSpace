@@ -93,7 +93,7 @@ export default function Filter() {
     return recipes;
   };
 
-  const handleFilters = async (key: string, value: string) => {
+  const handleFilters = async (key: string, value: string | number) => {
     const updated = { ...filters, [key]: value };
     setFilters(updated);
     console.log(updated);
@@ -130,12 +130,14 @@ export default function Filter() {
         <DropDown
           selectOptions={["Newest", "Oldest"]}
           value={filters.sort}
+          className="FilterOptions"
           onChange={(value) => handleFilters("sort", value)}
         />
         <h4>Prep Time</h4>
         <DropDown
           selectOptions={dropDownOptions()}
           value={filters.prepTime}
+          className="FilterOptions"
           onChange={(value) => handleFilters("prepTime", value)}
         />
       </div>

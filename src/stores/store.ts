@@ -4,6 +4,7 @@ import showRecipeAddFormReducer from "../features/showRecipeForm/showRecipeSlice
 import dialogSliceReducer from "../features/showDialogBox/showDialogSlice"
 import showGenerateIngredientSliceReducer from "../features/showGenerateIngredients/showGenerateIngredientSlice"
 import createIngredientListReducer from "../features/addIngredientsToList/addIngredientsToList"
+import userReducer from "../features/user/userSlice"
 
 export const store = configureStore({
     reducer:{
@@ -12,6 +13,7 @@ export const store = configureStore({
         showDialog:dialogSliceReducer,
         showGenerateIngredient: showGenerateIngredientSliceReducer,
         addIngredients: createIngredientListReducer,
+        user: userReducer,
     }
 })
 

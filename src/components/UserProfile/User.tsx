@@ -2,12 +2,11 @@ import { PiChefHat } from "react-icons/pi";
 import "./User.css";
 import { useSelector } from "react-redux";
 import type { RootState } from "../../stores/store";
-import { useLocation } from "react-router-dom";
 export default function UserProfile() {
   const { recipe, userRecipe } = useSelector(
     (state: RootState) => state.addRecipe,
   );
-  const { state } = useLocation();
+  const { user_name, headline } = useSelector((state: RootState) => state.user);
   return (
     <div className="Parent">
       <div className="UserSection">
@@ -17,8 +16,8 @@ export default function UserProfile() {
           </div>
 
           <div className="UserInfo">
-            <span>{state.user_name}</span>
-            <h4>{state.headline}</h4>
+            <span>{user_name}</span>
+            <h4>{headline}</h4>
             <div className="RecipeCount">
               <div className="TotalRecipeButton">
                 <span>🍽️ {recipe.length} total</span>

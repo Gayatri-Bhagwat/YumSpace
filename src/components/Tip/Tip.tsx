@@ -1,7 +1,7 @@
 import "./Tip.css"
 import React from "react";
 import { generateContent } from "../../services/gemini";
-
+import "../GenerateRecipe/GenerateRecipeButton.css"
 
 export default function Tip() {
     const [tip, setTip] = React.useState<string>("Tip: Always read the full recipe before you start cooking!");
@@ -19,23 +19,15 @@ export default function Tip() {
     return (
         <div className="TipClass">
             <div className="TipHeader">
-                <span>
-                    <span style={{fontSize:"1.5rem"}}>💡</span> Tip of the Day
+                <span style={{color:'#e8773d'}}>
+                    <span style={{fontSize:"1.5rem"}}>💡</span> 
+                    Chef's Tip
                 </span>
             </div>
             <p>
                 {tip || "Loading tip..."}
             </p>
-            <button style={{
-                background: "#e8773d",
-                outline: "none",
-                border: "none",
-                color: "white",
-                height: "2.3rem",
-                fontSize: "medium",
-                borderRadius: "0.5rem",
-                cursor: "pointer",
-            }} onClick={handleGenerate}>Generate Tip</button>
+            <button className="gen-btn" onClick={handleGenerate}>✦ Generate Tip</button>
         </div>
     )
 }

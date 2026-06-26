@@ -27,15 +27,6 @@
     flex-wrap: wrap;
 }
 
-.RecipeCard {
-    border: 1px solid #eee9e9;
-    border-radius: 1.2rem;
-    width: 100%;
-    padding: 1rem;
-    overflow: hidden;
-    position: relative;
-}
-
 .RecipeGrid {
     display: grid;
     grid-template-columns: repeat(5, 1fr);

@@ -311,6 +311,15 @@
     padding: 0.3rem 0.75rem;
     margin-top: 0.5rem;
 }
+.RecipeImagePlaceholderDetailPage {
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, #fde8d8, #f5a97a);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 6rem;
+}
 
 /* ---------- RESPONSIVE ---------- */
 @media (max-width: 860px) {

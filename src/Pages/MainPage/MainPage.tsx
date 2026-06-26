@@ -1,4 +1,5 @@
 import Filter from "../../components/Filter/Filter";
+import GenerateRecipeButton from "../../components/GenerateRecipe/GenerateRecipeButton";
 import Header from "../../components/Header/Header";
 import Recipe from "../../components/Recipes/Recipe";
 import Tag from "../../components/Tag/Tag";
@@ -16,6 +17,7 @@ export default function Main() {
                     <Filter />
                     <Tag />
                     <Tip/>
+                    <GenerateRecipeButton/>
                 </div>
                 <div className="RecipeContent">
                     <Recipe />

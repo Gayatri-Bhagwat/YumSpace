@@ -38,6 +38,7 @@ export default function TagIngredientInputForm({
 }) {
   "use no memo";
   const [isGenerating, setIsGenerating] = useState(false);
+  const [generateError, setGenerateError] = useState<string | null>(null);
   const { fields, append, remove, replace } = useFieldArray({ control, name });
 
   const title = getTitle?.() ?? "";
@@ -51,6 +52,7 @@ export default function TagIngredientInputForm({
     if (!currentTitle.trim()) return;
 
     setIsGenerating(true);
+    setGenerateError(null);
     try {
       let items: { name: string }[] = [];
       if (name === "tag") {
@@ -61,15 +63,17 @@ export default function TagIngredientInputForm({
           setIsGenerating(false);
           return;
         }
-        const result = await GenerateIngredientQuantity(
-          currentTitle,
-          currentServings,
-        );
+        const result = await GenerateIngredientQuantity(currentTitle, currentServings);
         items = result?.ingredients ?? [];
       }
-      replace(items);
+      if (items.length === 0) {
+        setGenerateError("No results returned — try again.");
+      } else {
+        replace(items);
+      }
     } catch (err) {
       console.error(err);
+      setGenerateError("Generation failed — please try again.");
     } finally {
       setIsGenerating(false);
     }
@@ -121,13 +125,18 @@ export default function TagIngredientInputForm({
           disabled={isGenerating || titleMissing || servingsMissing}
           style={
             titleMissing || servingsMissing
-              ? { opacity: 0.5, cursor: "not-allowed" , backgroundColor: "#E8521A", color: "white" }
+              ? { opacity: 0.5, cursor: "not-allowed", backgroundColor: "#E8521A", color: "white" }
               : { backgroundColor: "#E8521A", color: "white" }
           }
         >
           {buttonLabel}
         </button>
       </div>
+      {generateError && (
+        <div style={{ fontSize: "0.72rem", color: "#c0392b", marginTop: "0.35rem" }}>
+          ⚠ {generateError}
+        </div>
+      )}
     </div>
   );
 }
