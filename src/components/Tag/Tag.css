@@ -21,3 +21,21 @@
     padding-left: 0.3rem;
 }
 
+.AllPill {
+    width: fit-content;
+    border: none;
+    border-radius: 2rem;
+    background-color: #f5f0ee;
+    color: #9b8880;
+    padding: 0.3rem 0.85rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.15s, color 0.15s;
+}
+
+.AllPill.active {
+    background-color: #2d1f14;
+    color: white;
+}
+

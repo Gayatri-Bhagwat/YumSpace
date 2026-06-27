@@ -196,7 +196,6 @@ export const editExistingRecipe = async (data: MyFormValues, id: number) => {
                 body: JSON.stringify(recipeData),
             })
         );
-
         if (!response.ok) {
             const errorData = await response.json();
             return { success: false, errorDetails: errorData, status: response.status };

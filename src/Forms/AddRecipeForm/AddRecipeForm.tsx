@@ -69,16 +69,6 @@ export default function AddRecipeForm() {
     {
       InputElement: "input",
       inputType: "number",
-      inputTitle: "likes",
-      inputHeader: "Likes",
-      rules: {
-        required: "This field is required.",
-        valueAsNumber: true,
-      },
-    },
-    {
-      InputElement: "input",
-      inputType: "number",
       inputTitle: "time_minutes",
       inputHeader: "Prep time",
       rules: {

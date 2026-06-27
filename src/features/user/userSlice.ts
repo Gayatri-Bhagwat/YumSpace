@@ -6,8 +6,8 @@ interface UserState {
 }
 
 const initialState: UserState = {
-  user_name: "",
-  headline: "",
+  user_name: localStorage.getItem("user_name") ?? "",
+  headline: localStorage.getItem("headline") ?? "",
 };
 
 const userSlice = createSlice({
@@ -17,10 +17,14 @@ const userSlice = createSlice({
     setUser: (state, action: PayloadAction<UserState>) => {
       state.user_name = action.payload.user_name;
       state.headline = action.payload.headline;
+      localStorage.setItem("user_name", action.payload.user_name);
+      localStorage.setItem("headline", action.payload.headline);
     },
     clearUser: (state) => {
       state.user_name = "";
       state.headline = "";
+      localStorage.removeItem("user_name");
+      localStorage.removeItem("headline");
     },
   },
 });

@@ -21,6 +21,7 @@ import { useState } from "react";
 import { IoMdNutrition } from "react-icons/io";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
+import { getPlaceholderEmoji } from "../../services/ClassifyRecipeImage";
 
 interface Step {
   step: string;
@@ -63,7 +64,7 @@ export default function RecipeDetailPage() {
               className="RecipeImage"
             />
           ) : (
-            <div className="RecipeImagePlaceholderDetailPage">🍽️</div>
+            <div className="RecipeImagePlaceholderDetailPage">{getPlaceholderEmoji(state.tag)}</div>
           )}
           <button
             className="Nutritioninfo"

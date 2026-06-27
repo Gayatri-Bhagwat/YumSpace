@@ -1,23 +1,14 @@
 .RecipeDetails {
     display: flex;
-    flex-direction: row;
-    gap: 0.5rem;
-    padding: 0.4rem 0.5rem;
-    width: 100%;
     flex-wrap: nowrap;
-}
-
-.RecipeDetails .RecipeDetail {
-    flex-shrink: 1;
-    min-width: 0;
-    white-space: nowrap;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.4rem 0;
+    width: 100%;
 }
 
 .RecipeDetails .RecipeDetail span {
-    font-size: 1rem;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    font-size: 0.78rem;
 }
 
 .RecipeCard {
@@ -51,7 +42,6 @@
     display: block;
     width: 100%;
     aspect-ratio: 4/3;
-    /* height: 180px; */
     border-radius: 0.75rem;
     object-fit: cover;
     object-position: center;
@@ -62,7 +52,6 @@
 .RecipeImagePlaceholder {
     width: 100%;
     aspect-ratio: 4/3;
-    /* height: 180px; */
     border-radius: 0.75rem;
     background: linear-gradient(135deg, #fde8d8, #f5a97a);
     display: flex;
@@ -90,11 +79,15 @@
     flex: 1;
     display: flex;
     flex-direction: column;
-    padding: 0.3rem 0.1rem 0;
     overflow: hidden;
     min-height: 0;
 }
 
+.TagList {
+    display: flex;
+    flex-wrap: nowrap;
+    overflow: hidden;
+}
 
 .CardFooter {
     display: flex;

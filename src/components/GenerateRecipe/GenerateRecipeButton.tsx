@@ -8,14 +8,8 @@ import "react-loading-skeleton/dist/skeleton.css";
 import { useDispatch } from "react-redux";
 import { addRecipe } from "../../features/addRecipe/addRecipeSlice";
 import { addNewRecipe } from "../../services/APIService";
+import { getPlaceholderEmoji } from "../../services/ClassifyRecipeImage";
 
-const CUISINE_EMOJI: Record<string, string> = {
-  Italian: "🍝",
-  Indian: "🍛",
-  Chinese: "🥢",
-  Korean: "🍜",
-  Any: "🍽️",
-};
 
 export default function GenerateRecipeButton() {
   const dispatch = useDispatch();
@@ -104,7 +98,7 @@ export default function GenerateRecipeButton() {
           {ingredientList.map((i) => (
             <span key={i} className="ingredientPill">{i}</span>
           ))}
-          <span className="ingredientPill">+ yours</span>
+          <span className="ingredientPill">+ Your Ingredients</span>
         </div>
         <button className="gen-btn" onClick={() => setGenerateRecipeForm(true)}>
           ✦ Try it
@@ -246,7 +240,7 @@ export default function GenerateRecipeButton() {
                 <div>
                   {/* banner image */}
                   <div className="r-recipe-img">
-                    {CUISINE_EMOJI[filters.cuisine] ?? "🍽️"}
+                    {getPlaceholderEmoji(generatedRecipe.tag)}
                   </div>
 
                   {/* title + AI badge */}

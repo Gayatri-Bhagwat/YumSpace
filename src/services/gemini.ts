@@ -193,16 +193,16 @@ CRITICAL: You MUST return a "tags" array with 4 to 6 items. Never return an empt
 
 Generate relevant tags. You may use general knowledge about the dish type implied by the title.
 
-Rules:
-- ALWAYS return 4–6 tags. If the title is vague, use general food categories (e.g. "Dinner", "Comfort Food", "Quick & Easy").
-- Tags must come from these categories:
-    Cuisine   → Italian, Indian, Mexican, Japanese, Mediterranean, Chinese, Thai, American, French
-    Meal type → Breakfast, Lunch, Dinner, Snack, Dessert, Appetizer, Side Dish, Brunch
-    Method    → Baked, Grilled, Fried, Slow-Cooker, No-Cook, One-Pot, Air-Fryer, Steamed
-    Occasion  → Quick & Easy, Meal Prep, Party, Comfort Food, Healthy, Kid-Friendly
-    Dietary   → Vegetarian, Vegan, Gluten-Free, Dairy-Free, Keto, Low-Carb, High-Protein
-- Each tag must be Title Case, 1–3 words, no duplicates.
-- DIETARY RULE: Only add a Dietary tag if that word appears in the title itself.
+Tag each recipe title with 4–6 tags. Use only these options:
+
+Cuisine: Italian, Indian, Mexican, Japanese, Mediterranean, Chinese, Thai, American, French
+Meal Type: Breakfast, Lunch, Dinner, Snack, Dessert, Appetizer, Side Dish, Brunch
+Method: Baked, Grilled, Fried, Slow-Cooker, No-Cook, One-Pot, Air-Fryer, Steamed
+Occasion: Quick & Easy, Meal Prep, Party, Comfort Food, Healthy, Kid-Friendly
+Dietary: Vegetarian, Vegan, Gluten-Free, Dairy-Free, Keto, Low-Carb, High-Protein
+
+Rules: Title Case only. No duplicates. 4–6 tags per title. For vague titles, use Occasion tags. Only one word. 
+Only add a Dietary tag if that dietary word appears in the title.
 `;
 
   const call = () =>

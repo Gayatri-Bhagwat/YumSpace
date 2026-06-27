@@ -36,7 +36,13 @@ export default function Recipe() {
   // Search scope overrides the active tab while a search is running.
   // When no search is active, fall back to whichever tab is selected.
   const recipeToDisplay = (() => {
-    if (isSearchActive) return filteredRecipeData ?? [];
+    if (isSearchActive) {
+      if (activeTab === "mine") {
+        const myIds = new Set((userRecipe ?? []).map((r) => r.id));
+        return (filteredRecipeData ?? []).filter((r) => myIds.has(r.id));
+      }
+      return filteredRecipeData ?? [];
+    }
     if (isUserSearchActive) return filteredUserRecipeData ?? [];
     return (activeTab === "mine" ? userRecipe : recipe) ?? [];
   })();
